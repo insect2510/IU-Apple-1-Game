@@ -6,23 +6,24 @@
 //
 
 import SwiftUI
-import SpriteKit
+import SwiftData
 
-struct GameView: View {
-
-    var scene: SKScene {
-        let scene = GameScene()
-        scene.size = CGSize(width: 300, height: 533)
-        scene.scaleMode = .aspectFit
-        return scene
-    }
+struct HighScoreView: View {
+    
+    @Query  var scores: [Score]
 
     var body: some View {
-        SpriteView(scene: scene)
-            .ignoresSafeArea()
+        List {
+            ForEach(scores) { score in
+                Text(score.name)
+            }
+        }
     }
 }
 
 #Preview {
-    GameView()
+    HighScoreView()
+        .modelContainer(for:
+                        Score.self,
+                        inMemory: true)
 }
