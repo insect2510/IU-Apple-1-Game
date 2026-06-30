@@ -11,6 +11,7 @@ import SwiftData
 @Model
 class Score {
     
+    @Attribute(.unique) var id = UUID()
     var name: String
     var score: Int
     
