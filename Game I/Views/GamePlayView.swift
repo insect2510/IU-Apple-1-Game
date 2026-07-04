@@ -37,24 +37,18 @@ struct GamePlayView: View {
         }
         
         .onAppear {
-            scene.gameOverHandler = { finalScore in
-                score = finalScore
-            gameIsOver = true}
+            setupScene()
         }
         
-
     }
     
     func restartGame() {
         
-        scene.gameOverHandler = { finalScore in
-            score = finalScore
-            gameIsOver = true
-        }
         gameIsOver = false
         score = 0
         sceneID = UUID()
         scene = makeScene()
+        setupScene()
         
     }
     
@@ -63,6 +57,16 @@ struct GamePlayView: View {
         scene.size = CGSize(width: 300, height: 533)
         scene.scaleMode = .aspectFit
         return scene
+    }
+    
+    func setupScene() {
+        
+        scene.gameOverHandler = { finalScore in
+            DispatchQueue.main.async {
+                score = finalScore
+            gameIsOver = true
+            }}
+            
     }
 
 }
