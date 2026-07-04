@@ -17,8 +17,8 @@ struct GamePlayView: View {
     
     @State private var scene: GameScene = {
         let scene = GameScene()
-        scene.size = CGSize(width: 300, height: 533)
-        scene.scaleMode = .aspectFit
+        // scene.size = CGSize(width: 300, height: 533)
+       scene.scaleMode = .resizeFill
         return scene
     }()
     
@@ -57,8 +57,8 @@ struct GamePlayView: View {
     // makes a new scene
     func makeScene() -> GameScene {
         let scene = GameScene()
-        scene.size = CGSize(width: 300, height: 533)
-        scene.scaleMode = .aspectFit
+        // scene.size = CGSize(width: 300, height: 533)
+        scene.scaleMode = .resizeFill
         return scene
     }
     
