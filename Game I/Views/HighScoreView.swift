@@ -10,21 +10,21 @@ import SwiftData
 
 struct HighScoreView: View {
     
-    @Query  var scores: [Score]
+    @Query  var highScore: [Score]
     @Environment(\.modelContext) var modelContext
 
     var body: some View {
         NavigationStack {
             List {
-                ForEach(scores) { score in
+                ForEach(highScore) { score in
                     Text(score.name)
                 }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        let scoreNew = Score(name: "Dummy", score: 123)
-                        modelContext.insert(scoreNew)
+                        let highScoreNew = Score(name: "Dummy", score: 123)
+                        modelContext.insert(highScoreNew)
                     }, label: {
                         Image(systemName: "plus")
                     })
