@@ -10,6 +10,10 @@ import SpriteKit
 
 
 struct GameOverView: View {
+    
+    let score: Int
+    let restartAction: () -> Void
+    
     var body: some View {
         
         ZStack {
@@ -19,35 +23,33 @@ struct GameOverView: View {
             VStack(spacing: 32) {
                 
                 // Game Over Text
-           
-            Text("GAME OVER")
+                
+                Text("GAME OVER")
                     .font(.system(size: 48, weight: .black))
                     .foregroundColor(.warmwhite)
                 
-               // Text( "Your score: \(score)")
-            Text("Your score: 123")
+                Text( "Your score: \(score)")
                     .font(.system(size: 24, weight: .medium))
                     .foregroundColor(.warmwhite)
                 
                 
                 // Show Restart Button
-            
-            Button("Nochmal spielen") {
                 
-                restartGame()
-            }
-            .font(.system(size: 24, weight: .medium))
-            .padding(24)
-            .background(.darkcyan)
-            .foregroundColor(.warmwhite)
+                Button("Nochmal spielen") {
+                    
+                    restartAction()
+                    
+                }
+                .font(.system(size: 24, weight: .medium))
+                .padding(24)
+                .background(.darkcyan)
+                .foregroundColor(.warmwhite)
                 
             }
-        
         }
-        
     }
 }
 
-#Preview {
-    GameOverView()
-}
+//#Preview {
+//    GameOverView(score: 331, restartAction: restartGame())
+//}

@@ -1,6 +1,6 @@
 //
 //  GameScene.swift
-//  Gametest
+//  GameScene
 //
 //  Created by Oliver Hartmann on 25.06.26.
 //
@@ -9,10 +9,11 @@ import SpriteKit
 
 class GameScene: SKScene {
     
+    var gameOverHandler: ((Int) -> Void)?
+    
     // Duratian at the start of the game in seconds
     var duration = 3.0
   
-    
     // Timer
     var timerLabel = SKLabelNode(text: "01:00")
     var timeRemaining = 60
@@ -22,14 +23,9 @@ class GameScene: SKScene {
     var gameLifes = 3
     var gameLifesLabel = SKLabelNode(text: "Lifes: 3")
     
-    
     // Score label
     var scoreLabel = SKLabelNode(text: "Score: 0")
     var score = 0
-                      
-    // Restart
-    var restartLabel: SKLabelNode?
-    let buttonSize = CGSize(width: 220, height: 60)
     
     // Circle or Rectangle
     var randomObjectValue = Int.random(in: 1...100)
@@ -108,9 +104,6 @@ class GameScene: SKScene {
     }
     
     
-    
-    
-    
     // Draw a circle with random coordinates
     func drawObject(objectType: String) {
         
@@ -178,7 +171,6 @@ class GameScene: SKScene {
     }
     
     
-
     // get random values for coordinates
     func randomPoint() -> CGPoint {
         let x = CGFloat.random(in: 50...frame.width - 50)
@@ -250,53 +242,15 @@ class GameScene: SKScene {
     }
     
     
-    
     // End Game
     func endGame() {
         
         gameIsOver = true
-
-        backgroundColor = .darkred
-        
         
         // call remove objects function
         removeObject()
         
-        
-        // Game Over Text
-       let gameOver = SKLabelNode(text: "GAME OVER")
-        gameOver.fontName = "Helvectica-Bold"
-        gameOver.fontSize = 36
-        gameOver.fontColor = .warmwhite
-        gameOver.position = CGPoint(x: frame.midX, y: frame.midY)
-        addChild(gameOver)
-        
-        let yourScore = SKLabelNode(text: "Your score: \(score)")
-        yourScore.fontName = "Helvectica-Bold"
-        yourScore.fontSize = 24
-        yourScore.fontColor = .warmwhite
-        yourScore.position = CGPoint(x: frame.midX, y: frame.midY - 36)
-        addChild(yourScore)
-        
-        
-        // Show Restart Button
-        let restartButton = SKShapeNode(rectOf: buttonSize, cornerRadius: 12)
-        restartButton.fillColor = .darkcyan
-        restartButton.strokeColor =  .clear
-        restartButton.position = CGPoint(x: frame.midX, y: frame.midY - 80)
-        restartButton.name = "restart"
-        restartButton.zPosition = 10
-        addChild(restartButton)
-        
-        // Show Restart Text inside Button
-        let restartLabel = SKLabelNode(text: "Nochmal spielen")
-        restartLabel.fontName = "Helvectica-SemiBold"
-        restartLabel.fontSize = 24
-        restartLabel.fontColor = .warmwhite
-        restartLabel.verticalAlignmentMode = .center
-        restartLabel.horizontalAlignmentMode = .center
-        restartLabel.position = CGPoint(x: 0, y: 0)
-        restartButton.addChild(restartLabel)
+        gameOverHandler?(score)
             
     }
 
