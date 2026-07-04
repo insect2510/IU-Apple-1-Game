@@ -1,18 +1,21 @@
 //
-//  GameOverView.swift
+//  GameStartView.swift
 //  IU Apple I Game
 //
-//  Created by Oliver Hartmann on 04.07.26.
+//  Created by Oliver Hartmann on 05.07.26.
 //
 
 import SwiftUI
 import SpriteKit
 
 
-struct GameOverView: View {
+struct GameStartView: View {
     
-    let score: Int
-    let restartAction: () -> Void
+   // let score: Int
+   let restartAction: () -> Void
+
+    // game is not running
+    var isGaming: Bool = false
     
     var body: some View {
         
@@ -22,23 +25,22 @@ struct GameOverView: View {
             
             VStack(spacing: 32) {
                 
-                // Game Over Text
+                // Display game name
                 
-                Text("GAME OVER")
+                Text("TOJ")
                     .font(.system(size: 48, weight: .black))
                     .foregroundColor(.warmwhite)
-                
-                Text( "Your score: \(score)")
+                Text("Touch the object")
                     .font(.system(size: 24, weight: .medium))
                     .foregroundColor(.warmwhite)
                 
                 
-                // Show Restart Button
+                // show start button
                 
-                Button("Nochmal spielen") {
+                Button("Start Game") {
                     
-                    restartAction()
-                    
+            restartAction()
+
                 }
                 .font(.system(size: 24, weight: .medium))
                 .padding(24)
@@ -51,5 +53,5 @@ struct GameOverView: View {
 }
 
 //#Preview {
-//   GameOverView(score: 331, restartAction: restartGame())
+//   GameStartView()
 //}

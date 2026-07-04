@@ -15,6 +15,11 @@ class GameScene: SKScene {
     
     // Duratian at the start of the game in seconds
     var duration = 4.0
+    
+    // Text
+    let fontNamed = "Helvetica"
+    let fontSize = CGFloat(28)
+    let fontColor = UIColor.grey
   
     // Timer
     var timerLabel = SKLabelNode(text: "01:00")
@@ -47,7 +52,7 @@ class GameScene: SKScene {
         let topInset = view.safeAreaInsets.top
         let topPadding = topInset + 48
         
-        
+        // draw header bar
         let header = SKShapeNode (
             rectOf: CGSize(width: frame.width, height: topPadding
                           ))
@@ -62,9 +67,9 @@ class GameScene: SKScene {
 
         
         // Score Text Setup
-        scoreLabel = SKLabelNode(fontNamed: "Helvetica")
-        scoreLabel.fontSize = 28
-        scoreLabel.fontColor = .grey
+        scoreLabel = SKLabelNode(fontNamed: fontNamed)
+        scoreLabel.fontSize = fontSize
+        scoreLabel.fontColor = fontColor
         scoreLabel.horizontalAlignmentMode = .left
         scoreLabel.verticalAlignmentMode = .top
         scoreLabel.position = CGPoint(x: 20, y: frame.maxY - topPadding / 2)
@@ -72,9 +77,9 @@ class GameScene: SKScene {
         addChild(scoreLabel)
         
         // Game Lifes text
-        gameLifesLabel = SKLabelNode(fontNamed: "Helvetica")
-        gameLifesLabel.fontSize = 28
-        gameLifesLabel.fontColor = .grey
+        gameLifesLabel = SKLabelNode(fontNamed: fontNamed)
+        gameLifesLabel.fontSize = fontSize
+        gameLifesLabel.fontColor = fontColor
         gameLifesLabel.horizontalAlignmentMode = .center
         gameLifesLabel.verticalAlignmentMode = .top
         gameLifesLabel.position = CGPoint(x: frame.midX + 10, y: frame.maxY - topPadding / 2 )
@@ -82,9 +87,9 @@ class GameScene: SKScene {
         addChild(gameLifesLabel)
                 
         // Timer Setup
-        timerLabel = SKLabelNode(fontNamed: "Helvetica")
-        timerLabel.fontSize = 28
-        timerLabel.fontColor = .grey
+        timerLabel = SKLabelNode(fontNamed: fontNamed)
+        timerLabel.fontSize = fontSize
+        timerLabel.fontColor = fontColor
         timerLabel.horizontalAlignmentMode = .right
         timerLabel.verticalAlignmentMode = .top
         timerLabel.position = CGPoint(x: frame.maxX - 20, y: frame.maxY - topPadding / 2)
@@ -200,7 +205,7 @@ class GameScene: SKScene {
     // get random values for coordinates
     func randomPoint() -> CGPoint {
         let x = CGFloat.random(in: 50...frame.width - 50)
-        let y = CGFloat.random(in: 100...frame.height - 100)
+        let y = CGFloat.random(in: 100...frame.height - 200)
         return CGPoint(x: x, y: y)
     }
     

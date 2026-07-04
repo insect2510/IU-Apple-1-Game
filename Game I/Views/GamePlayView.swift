@@ -13,6 +13,7 @@ struct GamePlayView: View {
     @State private var sceneID: UUID = UUID()
     @State private var gameIsOver = false
     @State private var score = 0
+    @State private var isGaming = false
 
     
     @State private var scene: GameScene = {
@@ -30,6 +31,10 @@ struct GamePlayView: View {
             SpriteView(scene: scene)
                 .id(sceneID)
                 .ignoresSafeArea()
+            
+            if !isGaming {
+                GameStartView(restartAction: restartGame)
+            }
             
             if gameIsOver {
                 GameOverView(score: score, restartAction: restartGame)
@@ -50,6 +55,7 @@ struct GamePlayView: View {
         sceneID = UUID()
         scene = makeScene()
         setupScene()
+        isGaming = true
         
     }
     
