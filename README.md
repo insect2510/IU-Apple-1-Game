@@ -1,5 +1,5 @@
-IU Internationale Hochschule
-Projet Apple Mobile Solutions
-Gaming App for iOS
+## IU Internationale Hochschule<br>
+## Project Apple Mobile Solutions<br>
+## Gaming App for iOS<br>
 
-student: Oliver Hartmann
+Student: Oliver Hartmann
