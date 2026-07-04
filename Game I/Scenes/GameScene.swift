@@ -6,13 +6,14 @@
 //
 
 import SpriteKit
+import AudioToolbox
 
 class GameScene: SKScene {
     
     var gameOverHandler: ((Int) -> Void)?
     
     // Duratian at the start of the game in seconds
-    var duration = 3.0
+    var duration = 4.0
   
     // Timer
     var timerLabel = SKLabelNode(text: "01:00")
@@ -31,6 +32,11 @@ class GameScene: SKScene {
     var randomObjectValue = Int.random(in: 1...100)
     var objectType = "circle"
     let fadeDuration = 0.1
+    
+    // sound ids
+    let soundIdCircle:SystemSoundID = 1052   // new-mail.caf
+    let soundIdSquare:SystemSoundID = 1025   // new-mail.caf
+    let soundIdNotTouched:SystemSoundID = 1000   // new-email.caf
     
     override func didMove(to view: SKView) {
         
@@ -141,6 +147,8 @@ class GameScene: SKScene {
         // subtract 1 life if no touch on the object has been detected
                  self.gameLifes -= 1
                  gameLifesLabel.text = "Lifes: \(gameLifes)"
+                 // play audio file
+                 AudioServicesPlaySystemSound(soundIdNotTouched)
                  
         // end game if lifes = 0
                  
@@ -201,19 +209,16 @@ class GameScene: SKScene {
                         score += 10
                     }
             
-                if score >= 10 {
-                    duration = 2.0
-                }
-                if score >= 20 {
-                    duration = 1
+                if score >= 15 {
+                    duration = 3.0
                 }
                 
                 if score >= 30 {
-                    duration = 0.5
+                    duration = 2.0
                 }
                 
                 if score >= 50 {
-                    duration = 0.3
+                    duration = 1.0
                 }
                 
                 
@@ -221,9 +226,18 @@ class GameScene: SKScene {
                 scoreLabel.text = "Score: \(score)"
                 
                 
+                // play audio file
+                
+                if objectType == "circle" {
+                    AudioServicesPlaySystemSound(soundIdCircle)
+                } else if objectType == "square" {
+                    AudioServicesPlaySystemSound(soundIdSquare)
+                }
+               
+                
                 // scaleup animation after touching
-                let scaleUp = SKAction.scale(to: 1.5, duration: 0.1)
-                let fadeOut = SKAction.fadeOut(withDuration: 0.1)
+                let scaleUp = SKAction.scale(to: 1.5, duration: fadeDuration)
+                let fadeOut = SKAction.fadeOut(withDuration: fadeDuration)
                 let remove = SKAction.removeFromParent()
                 node.run(SKAction.sequence([scaleUp, fadeOut, remove]))
                 
