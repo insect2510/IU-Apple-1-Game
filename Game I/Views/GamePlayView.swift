@@ -42,8 +42,9 @@ struct GamePlayView: View {
         
     }
     
+    
+    // restarts the game with unique scene id
     func restartGame() {
-        
         gameIsOver = false
         score = 0
         sceneID = UUID()
@@ -52,6 +53,8 @@ struct GamePlayView: View {
         
     }
     
+    
+    // makes a new scene
     func makeScene() -> GameScene {
         let scene = GameScene()
         scene.size = CGSize(width: 300, height: 533)
@@ -59,8 +62,9 @@ struct GamePlayView: View {
         return scene
     }
     
+    
+    // sync GameScene with Game Over handler
     func setupScene() {
-        
         scene.gameOverHandler = { finalScore in
             DispatchQueue.main.async {
                 score = finalScore

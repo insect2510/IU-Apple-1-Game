@@ -217,8 +217,17 @@ class GameScene: SKScene {
                 }
                 
                 
-                removeObject()
+                // updates score on display
+                scoreLabel.text = "Score: \(score)"
                 
+                
+                // scaleup animation after touching
+                let scaleUp = SKAction.scale(to: 1.5, duration: 0.1)
+                let fadeOut = SKAction.fadeOut(withDuration: 0.1)
+                let remove = SKAction.removeFromParent()
+                node.run(SKAction.sequence([scaleUp, fadeOut, remove]))
+                
+                // calls a new object to draw
                 randomObject()
                
             }
@@ -242,7 +251,7 @@ class GameScene: SKScene {
     }
     
     
-    // End Game
+    // end of the game
     func endGame() {
         
         gameIsOver = true
