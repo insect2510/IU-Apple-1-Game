@@ -131,6 +131,7 @@ class GameScene: SKScene {
         // set duration for object display
         object.run(SKAction.sequence([
              SKAction.wait(forDuration: duration),
+             SKAction.scale(by: 0.1, duration: fadeDuration),
              SKAction.fadeOut(withDuration: fadeDuration),
              SKAction.removeFromParent(),
              SKAction.run { [weak self] in
@@ -215,7 +216,6 @@ class GameScene: SKScene {
                     duration = 0.3
                 }
                 
-                scoreLabel.text = "Score: \(score)"
                 
                 removeObject()
                 
