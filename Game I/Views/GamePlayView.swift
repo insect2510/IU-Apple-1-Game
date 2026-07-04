@@ -8,7 +8,7 @@
 import SwiftUI
 import SpriteKit
 
-struct GameView: View {
+struct GamePlayView: View {
 
     var scene: SKScene {
         let scene = GameScene()
@@ -24,5 +24,5 @@ struct GameView: View {
 }
 
 #Preview {
-    GameView()
+    GamePlayView()
 }
