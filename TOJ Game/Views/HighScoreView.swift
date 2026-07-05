@@ -1,9 +1,11 @@
 //
-//  TOJ Game
-//  ContentView.swift
+//  HighScoreView 2.swift
+//  IU Apple I Game
 //
-//  Created by Oliver Hartmann on 25.06.26.
+//  Created by Oliver Hartmann on 05.07.26.
 //
+
+/*
 
 import SwiftUI
 import SwiftData
@@ -49,3 +51,4 @@ struct HighScoreView: View {
                         Score.self,
                         inMemory: true)
 }
+*/

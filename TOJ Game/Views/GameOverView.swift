@@ -9,21 +9,18 @@ import SwiftUI
 import SpriteKit
 import SwiftData
 
-
-
-
 struct GameOverView: View {
     
-   // @Query(sort: \Score.score, order: .reverse)
-   // private var highScore: [Score]
+  @Query(sort: \Highscore.points, order: .reverse)
 
-   // @Environment(\.modelContext) var modelContext
+    private var highScore: [Highscore]
+
+ //  @Environment(\.modelContext) var modelContext
 
     
     let score: Int
     let restartAction: () -> Void
     
-
     
     var body: some View {
         
@@ -43,22 +40,28 @@ struct GameOverView: View {
                     .font(.system(size: 24, weight: .medium))
                     .foregroundColor(.warmwhite)
                 
-            //  VStack {
-            //         List {
-            //              ForEach(highScore) { score in
-            //                  HStack {
-            //                    //  Text(score.name)
-            //                      Spacer()
-            //                      Text("\(score.score)")
-            //                          .bold()
-            //                          .foregroundColor(.black)
-            //                  }
-            //
-            //              }
-            //          }
-            //      }
+                Text("Einträge: \(highScore.count)")
+                    .foregroundColor(.grey)
                 
+              
+                    List {
+                        ForEach(highScore) { entry in
+                            HStack {
+                                Text(entry.name)
+                                    .bold()
+                                    .foregroundColor(.black)
+                                
+                                Spacer()
+                                
+                                Text("\(entry.points)")
+                                    .bold()
+                                    .foregroundColor(.black)
+                            }
+                        }
+                    }
+                    .frame(height: 300)
                 
+            
                 // Show Restart Button
                 
                 Button("Nochmal spielen") {
@@ -73,9 +76,10 @@ struct GameOverView: View {
                 
             }
         }
+        
     }
 }
 
-//#Preview {
+// #Preview {
 //   GameOverView(score: 331, restartAction: restartGame())
-//}
+// }

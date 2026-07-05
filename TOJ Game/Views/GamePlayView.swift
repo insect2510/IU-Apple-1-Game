@@ -55,7 +55,7 @@ struct GamePlayView: View {
                 ZStack (alignment:.top){
                     
                     SpriteView(scene: scene)
-                       // .id(sceneID)
+                    // .id(sceneID)
                         .ignoresSafeArea()
                     
                     
@@ -75,31 +75,57 @@ struct GamePlayView: View {
                     .padding()
                     .frame(height: 80)
                     .background(LinearGradient(colors: [.lightnight, .darknight], startPoint: .top, endPoint: .bottom))
-
+                    
                 }
-
             }
-
+            
             
             if gameIsOver {
                 GameOverView(score: score, restartAction: restartGame)
+                    .id(score)
             }
         }
         
-        .onAppear {
-            setupScene()
+        .onChange(of: gameIsOver) { _, newValue in
+            
+            if newValue {
+                
+                let newScore = Highscore(
+                    name: "Oliver",
+                    points: score
+                )
+                
+                modelContext.insert(newScore)
+                
+                do {
+                    try modelContext.save()
+                    
+                    print("Gespeichert")
+                    
+                    let descriptor = FetchDescriptor<Highscore>()
+                    let result = try modelContext.fetch(descriptor)
+                    
+                    print("Direkt gefunden:", result.count)
+                    
+                    for item in result {
+                        print(item.name, item.points)
+                    }
+                    
+                } catch {
+                    print(error)
+                }
+            }
         }
-        
     }
     
     
-    // restarts the game with unique scene id
+    // restarts the game
     func restartGame() {
         
         gameData.score = 0
         gameData.lives = 3
         gameData.timeRemaining = 60
-        
+                
        let newScene = GameScene(
             size: self.scene.size,
             gameData: gameData
@@ -109,28 +135,19 @@ struct GamePlayView: View {
         
         newScene.gameOverHandler = { finalScore in
             DispatchQueue.main.async {
-                
-                let newScore = Score(
-                    score: finalScore
-                )
-                
-                modelContext.insert(newScore)
-                
+
                 score = finalScore
                 gameIsOver = true
                 isGaming = false
             }
         }
         
-        
-        
         scene = newScene
-
         gameIsOver = false
         isGaming = true
-
         
     }
+    
     
     func formatTime(_ seconds:Int) -> String {
         
@@ -139,35 +156,6 @@ struct GamePlayView: View {
             seconds / 60,
             seconds % 60
             )
-    }
-    
-    // makes a new scene
-   // func makeScene() -> GameScene {
-   //     let scene = GameScene()
-   //     scene.scaleMode = .resizeFill
-   //     return scene
-   // }
-    
-    
-    // sync GameScene with Game Over handler
-    func setupScene() {
-        
-        scene.gameOverHandler = { finalScore in
-            
-            DispatchQueue.main.async {
-                
-                let newScore = Score (
-                    // name: "Oliver",
-                    score: finalScore
-                )
-                
-                modelContext.insert(newScore)
-                score = finalScore
-                gameIsOver = true
-                isGaming = false
-            }
-        }
-            
     }
 
 }

@@ -10,10 +10,12 @@ import SwiftData
 
 @main
 struct TojGame: App {
+    
     var body: some Scene {
         WindowGroup {
             GamePlayView()
-                .modelContainer(for: Score.self)
         }
+                .modelContainer(for: Highscore.self)
+       
     }
 }

@@ -51,11 +51,6 @@ class GameScene: SKScene {
         // background color for scene
         backgroundColor = .darknight
         
-        // Check forSafeArea
-        let topInset = view.safeAreaInsets.top
-      //  let topPadding = topInset + 48
-        
-        
         // Timer Setup
         startTimer()
         drawObject(objectType: objectType)

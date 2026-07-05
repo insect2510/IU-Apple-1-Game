@@ -9,26 +9,24 @@ import Foundation
 import SwiftData
 
 @Model
-final class Score {
+class Highscore {
     
-    @Attribute(.unique) var id = UUID()
-   // var name: String
-    var score: Int
+    var name: String
+    var points: Int
     
-    init(score: Int) {
-       // self.name = name
-        self.score = score
+    init(name: String, points: Int) {
+        self.name = name
+        self.points = points
     }
     
 }
 
-extension Score {
+extension Highscore {
     static let sampleData = [
-        Score(score: 10),
-        Score(score: 20),
-      //  Score(name: "Oliver", score: 10),
-      //  Score(name: "Marco", score: 100),
-      //  Score(name: "Janet", score: 321),
+
+       Highscore(name: "Oliver", points: 10),
+       Highscore(name: "Marco", points: 100),
+       Highscore(name: "Janet", points: 321),
         
     ]
 }
