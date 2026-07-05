@@ -12,29 +12,26 @@ import SwiftUI
 
 class GameScene: SKScene {
     
+    var gameData: GameData
+    
+    init(size: CGSize, gameData: GameData) {
+        self.gameData = gameData
+        super.init(size: size)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     var gameOverHandler: ((Int) -> Void)?
     
     // Duratian at the start of the game in seconds
     var duration = 4.0
-    
-    // Text
-    let fontNamed = "Helvetica"
-    let fontSize = CGFloat(28)
-    let fontColor = UIColor.grey
-  
-    // Timer
-    var timerLabel = SKLabelNode(text: "01:00")
-    var timeRemaining = 60
     var gameIsOver = false
     
-    // Games Lifes
-    var gameLifes = 3
-    var gameLifesLabel = SKLabelNode(text: "Lifes: 3")
-    
-    // Score label
-    var scoreLabel = SKLabelNode(text: "Score: 0")
-    var score = 0
-    
+    // Timer
+    var gameTime: Timer?
+
     // Circle or Rectangle
     var randomObjectValue = Int.random(in: 1...100)
     var objectType = "circle"
@@ -51,92 +48,44 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
+        // background color for scene
         backgroundColor = .darknight
         
         // Check forSafeArea
         let topInset = view.safeAreaInsets.top
-        let topPadding = topInset + 48
+      //  let topPadding = topInset + 48
         
-        // draw header bar
-        let header = SKShapeNode (
-            rectOf: CGSize(width: frame.width, height: topPadding
-                          ))
-            header.position = CGPoint (x: frame.midX,
-                                       y: frame.maxY - topPadding / 2
-                                      
-                                      )
-            header.fillColor = .lightnight
-            header.zPosition = -1
-            
-        addChild(header)
-
         
-        // Score Text Setup
-        scoreLabel = SKLabelNode(fontNamed: fontNamed)
-        scoreLabel.fontSize = fontSize
-        scoreLabel.fontColor = fontColor
-        scoreLabel.horizontalAlignmentMode = .left
-        scoreLabel.verticalAlignmentMode = .top
-        scoreLabel.position = CGPoint(x: 20, y: frame.maxY - topPadding / 2)
-        scoreLabel.text = "Score: 0"
-        addChild(scoreLabel)
-        
-        // Game Lifes text
-        gameLifesLabel = SKLabelNode(fontNamed: fontNamed)
-        gameLifesLabel.fontSize = fontSize
-        gameLifesLabel.fontColor = fontColor
-        gameLifesLabel.horizontalAlignmentMode = .center
-        gameLifesLabel.verticalAlignmentMode = .top
-        gameLifesLabel.position = CGPoint(x: frame.midX + 10, y: frame.maxY - topPadding / 2 )
-        gameLifesLabel.text = "Lifes: \(gameLifes)"
-        addChild(gameLifesLabel)
-                
         // Timer Setup
-        timerLabel = SKLabelNode(fontNamed: fontNamed)
-        timerLabel.fontSize = fontSize
-        timerLabel.fontColor = fontColor
-        timerLabel.horizontalAlignmentMode = .right
-        timerLabel.verticalAlignmentMode = .top
-        timerLabel.position = CGPoint(x: frame.maxX - 20, y: frame.maxY - topPadding / 2)
-        timerLabel.text = "01:00"
-        addChild(timerLabel)
         startTimer()
-        
         drawObject(objectType: objectType)
     }
     
     
     // Start Timer
     func startTimer() {
-        let counddown = SKAction.sequence ([
-            SKAction.wait(forDuration: 1.0),
-            SKAction.run { [weak self] in
-                
-                guard let self = self else { return }
-                
-                if self.gameIsOver { return }
-                
-                self.timeRemaining -= 1
-                self.updateTimerLabel()
-                
-                if self.timeRemaining == 0 {
-                    self.endGame()
-                }
-            }
-    ])
-        run(SKAction.repeatForever(counddown), withKey: "gameTimer")
-    }
-    
-    
-    // Update Timer Text
-    func updateTimerLabel() {
-        let minutes = timeRemaining / 60
-        let seconds = timeRemaining % 60
         
-        timerLabel.text = String(format: "%02d:%02d", minutes, seconds)
+        gameTime?.invalidate()
+        
+        gameTime = Timer.scheduledTimer(
+            withTimeInterval: 1.0,
+            repeats: true
+        )
+        { [weak self] timer in
+            
+            guard let self else { return }
+            
+            if self.gameIsOver {
+                timer.invalidate()
+                return
+            }
+            self.gameData.timeRemaining -= 1
+            if self.gameData.timeRemaining == 0 {
+                self.endGame()
+            }
+        }
     }
-    
-    
+
     // Draw a circle with random coordinates
     func drawObject(objectType: String) {
         
@@ -166,21 +115,20 @@ class GameScene: SKScene {
              SKAction.wait(forDuration: duration),
              SKAction.scale(by: 0.1, duration: fadeDuration),
              SKAction.fadeOut(withDuration: fadeDuration),
-             SKAction.removeFromParent(),
+    
+             
              SKAction.run { [weak self] in
+                 
                  guard let self = self else { return }
                  
-                 
-        // subtract 1 life if no touch on the object has been detected
-                 self.gameLifes -= 1
-                 gameLifesLabel.text = "Lifes: \(gameLifes)"
+                 // remove one  life if no touch on the object has been detected
+                 self.gameData.lives -= 1
                  
                  // play audio file
-                 AudioServicesPlaySystemSound(soundIdNotTouched)
+                 AudioServicesPlaySystemSound(self.soundIdNotTouched)
                  
-        // end game if lifes = 0
-                 
-                 if gameLifes <= 0 {
+                 // check Game Over
+                 if self.gameData.lives <= 0 {
                      self.endGame()
                      
                  } else {
@@ -188,7 +136,8 @@ class GameScene: SKScene {
                      self.randomObject()
                  }
 
-             }
+             },
+             SKAction.removeFromParent()
          ]))
     }
     
@@ -220,12 +169,6 @@ class GameScene: SKScene {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
         let nodes = nodes(at: location)
-        for node in nodes {
-            if node.name == "restart" {
-                restartGame()
-                return
-            }
-        }
         
         if gameIsOver { return }
     
@@ -233,25 +176,21 @@ class GameScene: SKScene {
         for node in nodes {
             if node.name == "object" {
                 if objectType == "circle" {
-                    score += 1 } else {
-                        score += 10
+                    self.gameData.score += 1 } else {
+                        self.gameData.score += 10
                     }
             
-                if score >= 15 {
+                if   gameData.score >= 15 {
                     duration = 3.0
                 }
                 
-                if score >= 30 {
+                if   gameData.score >= 30 {
                     duration = 2.0
                 }
                 
-                if score >= 50 {
+                if  gameData.score >= 50 {
                     duration = 1.0
                 }
-                
-                
-                // updates score on display
-                scoreLabel.text = "Score: \(score)"
                 
                 
                 // animation after touching
@@ -299,7 +238,7 @@ class GameScene: SKScene {
     }
     
     
-    // ramdomly choose circle or square for object tyoe
+    // ramdomly choose circle or square for object type
     func randomObject() {
         
         randomObjectValue = Int.random(in: 1...100)
@@ -322,19 +261,8 @@ class GameScene: SKScene {
         
         // call remove all objects function
         removeObject()
-        
-        gameOverHandler?(score)
-        
+        gameOverHandler?(gameData.score)
 
-            
     }
 
-    
-    // restart the game
-    func restartGame() {
-        guard let view = self.view else { return }
-        let newScene = GameScene(size: self.size)
-        newScene.scaleMode = self.scaleMode
-        view.presentScene(newScene, transition: SKTransition.fade(withDuration: 0.5))
-    }
 }

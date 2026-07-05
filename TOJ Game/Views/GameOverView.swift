@@ -14,10 +14,10 @@ import SwiftData
 
 struct GameOverView: View {
     
-    @Query(sort: \Score.score, order: .reverse)
-    private var highScore: [Score]
+   // @Query(sort: \Score.score, order: .reverse)
+   // private var highScore: [Score]
 
-    @Environment(\.modelContext) var modelContext
+   // @Environment(\.modelContext) var modelContext
 
     
     let score: Int

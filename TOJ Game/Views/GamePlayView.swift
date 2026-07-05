@@ -18,14 +18,29 @@ struct GamePlayView: View {
     @State private var gameIsOver = false
     @State private var score = 0
     @State private var isGaming = false
-
     
-    @State private var scene: GameScene = {
-        let scene = GameScene()
-        // scene.size = CGSize(width: 300, height: 533)
-       scene.scaleMode = .resizeFill
-        return scene
-    }()
+    @StateObject private var gameData: GameData
+    
+    @State private var scene: GameScene
+    
+    init() {
+        let data = GameData()
+        
+        _gameData = StateObject(
+            wrappedValue: data
+        )
+        
+        let newScene = GameScene(
+            size: UIScreen.main.bounds.size,
+            gameData: data
+        )
+        
+        newScene.scaleMode = .resizeFill
+        
+        _scene = State(
+            initialValue: newScene
+        )
+    }
     
 
     var body: some View {
@@ -37,9 +52,32 @@ struct GamePlayView: View {
             }
             
             if isGaming {
-                SpriteView(scene: scene)
-                    .id(sceneID)
-                    .ignoresSafeArea()
+                ZStack (alignment:.top){
+                    
+                    SpriteView(scene: scene)
+                       // .id(sceneID)
+                        .ignoresSafeArea()
+                    
+                    
+                    HStack {
+                        Text("Score: \(gameData.score)")
+                        
+                        Spacer()
+                        
+                        Text("Lives: \(gameData.lives)")
+                        
+                        Spacer()
+                        
+                        Text(formatTime(gameData.timeRemaining))
+                    }
+                    .font(.title3)
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(height: 80)
+                    .background(LinearGradient(colors: [.lightnight, .darknight], startPoint: .top, endPoint: .bottom))
+
+                }
+
             }
 
             
@@ -57,28 +95,65 @@ struct GamePlayView: View {
     
     // restarts the game with unique scene id
     func restartGame() {
+        
+        gameData.score = 0
+        gameData.lives = 3
+        gameData.timeRemaining = 60
+        
+       let newScene = GameScene(
+            size: self.scene.size,
+            gameData: gameData
+        )
+        
+        newScene.scaleMode = .resizeFill
+        
+        newScene.gameOverHandler = { finalScore in
+            DispatchQueue.main.async {
+                
+                let newScore = Score(
+                    score: finalScore
+                )
+                
+                modelContext.insert(newScore)
+                
+                score = finalScore
+                gameIsOver = true
+                isGaming = false
+            }
+        }
+        
+        
+        
+        scene = newScene
+
         gameIsOver = false
-        score = 0
-        sceneID = UUID()
-        scene = makeScene()
-        setupScene()
         isGaming = true
+
         
     }
     
+    func formatTime(_ seconds:Int) -> String {
+        
+        String(
+            format:"%02d:%02d",
+            seconds / 60,
+            seconds % 60
+            )
+    }
     
     // makes a new scene
-    func makeScene() -> GameScene {
-        let scene = GameScene()
-        // scene.size = CGSize(width: 300, height: 533)
-        scene.scaleMode = .resizeFill
-        return scene
-    }
+   // func makeScene() -> GameScene {
+   //     let scene = GameScene()
+   //     scene.scaleMode = .resizeFill
+   //     return scene
+   // }
     
     
     // sync GameScene with Game Over handler
     func setupScene() {
+        
         scene.gameOverHandler = { finalScore in
+            
             DispatchQueue.main.async {
                 
                 let newScore = Score (
@@ -89,6 +164,7 @@ struct GamePlayView: View {
                 modelContext.insert(newScore)
                 score = finalScore
                 gameIsOver = true
+                isGaming = false
             }
         }
             
