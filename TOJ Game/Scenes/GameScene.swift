@@ -1,4 +1,5 @@
 //
+//  TOJ Game
 //  GameScene.swift
 //  GameScene
 //
@@ -43,6 +44,10 @@ class GameScene: SKScene {
     let soundIdCircle:SystemSoundID = 1052   // new-mail.caf
     let soundIdSquare:SystemSoundID = 1025   // new-mail.caf
     let soundIdNotTouched:SystemSoundID = 1000   // new-email.caf
+    
+    // particles
+    var particleFileName = "ParticleFire"
+    var soundId:SystemSoundID = 0
     
     override func didMove(to view: SKView) {
         
@@ -169,6 +174,7 @@ class GameScene: SKScene {
         // subtract 1 life if no touch on the object has been detected
                  self.gameLifes -= 1
                  gameLifesLabel.text = "Lifes: \(gameLifes)"
+                 
                  // play audio file
                  AudioServicesPlaySystemSound(soundIdNotTouched)
                  
@@ -248,18 +254,40 @@ class GameScene: SKScene {
                 scoreLabel.text = "Score: \(score)"
                 
                 
-                // play audio file
+                // animation after touching
                 
-                if objectType == "circle" {
-                    AudioServicesPlaySystemSound(soundIdCircle)
-                } else if objectType == "square" {
-                    AudioServicesPlaySystemSound(soundIdSquare)
+                // particle animation
+                // for square object
+                if objectType == "square" {
+                    particleFileName = "ParticleMagic"
+                    soundId = soundIdSquare
                 }
-               
+                // for cirlce object
+                else if objectType == "circle" {
+                particleFileName = "ParticleFire"
+                soundId = soundIdCircle
+
+            }
+                // start particle anmiation based on object type
+                if let particles = SKEmitterNode(fileNamed: particleFileName) {
+                particles.position = node.position
                 
-                // scaleup animation after touching
-                let scaleUp = SKAction.scale(to: 1.5, duration: fadeDuration)
-                let fadeOut = SKAction.fadeOut(withDuration: fadeDuration)
+                // add audio
+                AudioServicesPlaySystemSound(SystemSoundID(soundId))
+                
+                // add particle
+                addChild(particles)
+                    
+                // wait and remove particle node
+                let removeParticle = SKAction.sequence([SKAction.wait(forDuration: 2),
+                                                        SKAction.removeFromParent()])
+                particles.run(removeParticle)
+            }
+                
+                
+                // object fade out animation
+                let scaleUp = SKAction.scale(to: 1.5, duration: fadeDuration / 2)
+                let fadeOut = SKAction.fadeOut(withDuration: fadeDuration / 2)
                 let remove = SKAction.removeFromParent()
                 node.run(SKAction.sequence([scaleUp, fadeOut, remove]))
                 
@@ -292,10 +320,12 @@ class GameScene: SKScene {
         
         gameIsOver = true
         
-        // call remove objects function
+        // call remove all objects function
         removeObject()
         
         gameOverHandler?(score)
+        
+
             
     }
 

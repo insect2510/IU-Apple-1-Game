@@ -1,18 +1,29 @@
 //
+//  TOJ Game
 //  GameOverView.swift
-//  IU Apple I Game
 //
 //  Created by Oliver Hartmann on 04.07.26.
 //
 
 import SwiftUI
 import SpriteKit
+import SwiftData
+
+
 
 
 struct GameOverView: View {
     
+    @Query(sort: \Score.score, order: .reverse)
+    private var highScore: [Score]
+
+    @Environment(\.modelContext) var modelContext
+
+    
     let score: Int
     let restartAction: () -> Void
+    
+
     
     var body: some View {
         
@@ -31,6 +42,21 @@ struct GameOverView: View {
                 Text( "Your score: \(score)")
                     .font(.system(size: 24, weight: .medium))
                     .foregroundColor(.warmwhite)
+                
+            //  VStack {
+            //         List {
+            //              ForEach(highScore) { score in
+            //                  HStack {
+            //                    //  Text(score.name)
+            //                      Spacer()
+            //                      Text("\(score.score)")
+            //                          .bold()
+            //                          .foregroundColor(.black)
+            //                  }
+            //
+            //              }
+            //          }
+            //      }
                 
                 
                 // Show Restart Button

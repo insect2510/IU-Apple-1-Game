@@ -1,4 +1,5 @@
 //
+//  TOJ Game
 //  GamePlayView.swift
 //  GamePlayView
 //
@@ -7,8 +8,11 @@
 
 import SwiftUI
 import SpriteKit
+import SwiftData
 
 struct GamePlayView: View {
+    
+    @Environment(\.modelContext) private var modelContext
     
     @State private var sceneID: UUID = UUID()
     @State private var gameIsOver = false
@@ -28,13 +32,16 @@ struct GamePlayView: View {
         
         ZStack {
             
-            SpriteView(scene: scene)
-                .id(sceneID)
-                .ignoresSafeArea()
-            
             if !isGaming {
                 GameStartView(restartAction: restartGame)
             }
+            
+            if isGaming {
+                SpriteView(scene: scene)
+                    .id(sceneID)
+                    .ignoresSafeArea()
+            }
+
             
             if gameIsOver {
                 GameOverView(score: score, restartAction: restartGame)
@@ -73,9 +80,17 @@ struct GamePlayView: View {
     func setupScene() {
         scene.gameOverHandler = { finalScore in
             DispatchQueue.main.async {
+                
+                let newScore = Score (
+                    // name: "Oliver",
+                    score: finalScore
+                )
+                
+                modelContext.insert(newScore)
                 score = finalScore
-            gameIsOver = true
-            }}
+                gameIsOver = true
+            }
+        }
             
     }
 

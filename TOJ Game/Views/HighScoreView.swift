@@ -1,6 +1,6 @@
 //
+//  TOJ Game
 //  ContentView.swift
-//  Gametest
 //
 //  Created by Oliver Hartmann on 25.06.26.
 //
@@ -10,20 +10,29 @@ import SwiftData
 
 struct HighScoreView: View {
     
-    @Query  var highScore: [Score]
+    // @Query  var highScore: [Score]
+    @Query(sort: \Score.score, order: .reverse)
+    private var highScore: [Score]
+    
     @Environment(\.modelContext) var modelContext
 
     var body: some View {
-        NavigationStack {
+      NavigationStack {
             List {
                 ForEach(highScore) { score in
-                    Text(score.name)
+                    HStack {
+                      //  Text(score.name)
+                        Spacer()
+                        Text("\(score.score)")
+                            .bold()
+                    }
+      
                 }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        let highScoreNew = Score(name: "Dummy", score: 123)
+                        let highScoreNew = Score(score: 123)
                         modelContext.insert(highScoreNew)
                     }, label: {
                         Image(systemName: "plus")

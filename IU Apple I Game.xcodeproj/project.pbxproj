@@ -11,9 +11,9 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		EFDB0D592FEC987400FA4C3A /* Game I */ = {
+		EFDB0D592FEC987400FA4C3A /* TOJ Game */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Game I";
+			path = "TOJ Game";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -32,7 +32,7 @@
 		EFDB0D4E2FEC987400FA4C3A = {
 			isa = PBXGroup;
 			children = (
-				EFDB0D592FEC987400FA4C3A /* Game I */,
+				EFDB0D592FEC987400FA4C3A /* TOJ Game */,
 				EFDB0D582FEC987400FA4C3A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,7 +61,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				EFDB0D592FEC987400FA4C3A /* Game I */,
+				EFDB0D592FEC987400FA4C3A /* TOJ Game */,
 			);
 			name = "IU Apple I Game";
 			packageProductDependencies = (
