@@ -10,7 +10,10 @@ import SpriteKit
 import AudioToolbox
 import SwiftUI
 
+
 class GameScene: SKScene {
+    
+    // MARK: Setup
     
     var gameData: GameData
     
@@ -25,41 +28,51 @@ class GameScene: SKScene {
     
     
     // gameOverHandller
+    
     var gameOverHandler: ((Int, Int) -> Void)?
     
     // Duratian at the start of the game in seconds
+    
     var duration = 4.0
     var gameIsOver = false
     
     // Timer
+    
     var gameTime: Timer?
 
     // Circle or Rectangle
+    
     var randomObjectValue = Int.random(in: 1...100)
     var objectType = "circle"
     let fadeDuration = 0.1
     
     // sound ids
-    let soundIdCircle:SystemSoundID = 1052   // new-mail.caf
-    let soundIdSquare:SystemSoundID = 1025   // new-mail.caf
-    let soundIdNotTouched:SystemSoundID = 1000   // new-email.caf
+    
+    let soundIdCircle:SystemSoundID = 1052      // normal touch
+    let soundIdSquare:SystemSoundID = 1007     // bonus touch
+    let soundIdMissTouch:SystemSoundID = 1000   // touch missed
+    let soundIdGameOver:SystemSoundID = 1021    // game over
     
     // particles
+    
     var particleFileName = "ParticleFire"
     var soundId:SystemSoundID = 0
     
     override func didMove(to view: SKView) {
         
         // background color for scene
+        
         backgroundColor = .darknight
         
         // Timer Setup
+        
         startTimer()
         drawObject(objectType: objectType)
     }
     
     
     // Start Timer
+    
     func startTimer() {
         
         gameTime?.invalidate()
@@ -83,11 +96,14 @@ class GameScene: SKScene {
         }
     }
 
-    // Draw a circle with random coordinates
+    
+    //MARK:  Draw a circle with random coordinates
+    
     func drawObject(objectType: String) {
         
         
         // draw circle or square
+        
         let object: SKShapeNode
         
         if objectType == "circle" {
@@ -103,11 +119,15 @@ class GameScene: SKScene {
             object.position = randomPoint()
         }
         
+        
         // add gaming object to the view
+        
         object.name = "object"
         addChild(object)
         
+        
         // set duration for object display
+        
         object.run(SKAction.sequence([
              SKAction.wait(forDuration: duration),
              SKAction.scale(by: 0.1, duration: fadeDuration),
@@ -119,16 +139,21 @@ class GameScene: SKScene {
                  guard let self = self else { return }
                  
                  // remove one  life if no touch on the object has been detected
+                 
                  self.gameData.lives -= 1
                  
-                 // play audio file
-                 AudioServicesPlaySystemSound(self.soundIdNotTouched)
+
                  
                  // check Game Over
+                 
                  if self.gameData.lives <= 0 {
                      self.endGame()
                      
                  } else {
+                     
+                     // play audio file
+                     
+                     AudioServicesPlaySystemSound(self.soundIdMissTouch)
                      
                      self.randomObject()
                  }
@@ -138,7 +163,7 @@ class GameScene: SKScene {
          ]))
     }
     
-    // Remove old object before drawing new object
+    // MARK: Remove old object before drawing new object
     func removeObject() {
  
         enumerateChildNodes(withName: "object") { (object, _) in
@@ -154,14 +179,14 @@ class GameScene: SKScene {
     }
     
     
-    // get random values for coordinates
+    // MARK:  get random values for coordinates
     func randomPoint() -> CGPoint {
         let x = CGFloat.random(in: 50...frame.width - 50)
         let y = CGFloat.random(in: 100...frame.height - 200)
         return CGPoint(x: x, y: y)
     }
     
-    // Game Play
+    //MARK: Game Play
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
@@ -238,7 +263,7 @@ class GameScene: SKScene {
     }
     
     
-    // ramdomly choose circle or square for object type
+    //MARK: ramdomly choose circle or square for object type
     func randomObject() {
         
         randomObjectValue = Int.random(in: 1...100)
@@ -254,12 +279,14 @@ class GameScene: SKScene {
     }
     
     
-    // end of the game
+    //MARK: end of the game
     func endGame() {
         
         gameIsOver = true
         
         gameTime?.invalidate()
+        
+       // AudioServicesPlaySystemSound(self.soundIdGameOver)
         
         // call remove all objects function
         removeObject()

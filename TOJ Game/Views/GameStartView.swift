@@ -17,6 +17,9 @@ struct GameStartView: View {
     // game is not running
     var isGaming: Bool = false
     
+    
+    // MARK: game start view
+    
     var body: some View {
         
         ZStack {

@@ -8,6 +8,7 @@
 import SwiftUI
 import SpriteKit
 import SwiftData
+import AudioToolbox
 
 struct GameOverView: View {
     
@@ -20,6 +21,7 @@ struct GameOverView: View {
     
     let score: Int
     let level: Int
+    let isNewHighScore: Bool
     let restartAction: () -> Void
     
     
@@ -29,17 +31,19 @@ struct GameOverView: View {
             Color.darknight
                 .ignoresSafeArea()
             
-            VStack(spacing: 32) {
+            VStack(spacing: 24) {
                 
                 // MARK: Game Over Header
                 
                 Text("GAME OVER")
                     .font (
                         .system(
-                            size: 44,
+                            .largeTitle,
                             weight: .thin,
                         )
+                        
                     )
+                    .scaleEffect(1.5)
                     .tracking(5)
                     .foregroundColor(.warmwhite)
 
@@ -59,13 +63,11 @@ struct GameOverView: View {
                             .foregroundColor(.warmwhite)
                     }
                     
-                    
                     // Spacer
                     
                     Rectangle()
                         .fill(.warmwhite.opacity(0.25))
                         .frame(width: 1, height: 50)
-                    
                     
                     VStack (spacing: 6) {
                         Text( "level:")
@@ -84,6 +86,35 @@ struct GameOverView: View {
                 .textCase(.uppercase)
                 
                 
+                if isNewHighScore {
+                    Text("Congrats you made it into the top5!")
+                        .font(.title2)
+                        .fontWeight(.medium)
+                        .foregroundColor(.warmwhite)
+                        .onAppear {
+                            
+                            let soundIdHighscore = 1025
+                            AudioServicesPlaySystemSound(SystemSoundID(soundIdHighscore))
+                        }
+                    
+
+                    
+                } else {
+                    
+                    Text("Sorry, you didn't make it in the top5!")
+                        .font(.title2)
+                        .fontWeight(.medium)
+                        .foregroundColor(.warmwhite)
+                        .onAppear {
+                            
+                            let soundIdHighscore = 1021
+                            AudioServicesPlaySystemSound(SystemSoundID(soundIdHighscore))
+                        }
+                    
+                }
+
+                    
+   
                 // MARK: Highscore Card
                 
                 VStack(spacing: 16) {
@@ -205,6 +236,6 @@ struct GameOverView: View {
     }
 }
 
- #Preview {
-     GameOverView(score: 331, level: 1, restartAction: {} )
- }
+// #Preview {
+//     GameOverView(score: 331, level: 1, restartAction: {isNewHighScore: true} )
+// }

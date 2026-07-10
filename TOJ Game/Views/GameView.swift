@@ -24,6 +24,12 @@ struct GameView: View {
     
     @State private var scene: GameScene
     
+    @State private var isNewHighScore = false
+    
+    @Query(sort: \Highscore.points, order: .reverse)
+    private var highScore: [Highscore]
+    
+    
     init() {
         
         let data = GameData()
@@ -44,6 +50,8 @@ struct GameView: View {
         )
     }
     
+    //MARK: main view
+    
     var body: some View {
         
         ZStack {
@@ -53,7 +61,10 @@ struct GameView: View {
                 
                 
                 if gameIsOver {
-                    GameOverView(score: finalScore, level: finalLevel, restartAction: restartGame)
+                    GameOverView(score: finalScore,
+                                 level: finalLevel,
+                                 isNewHighScore: isNewHighScore,
+                                 restartAction: restartGame)
                         .id(gameData.score)
                 }
             }
@@ -99,9 +110,11 @@ struct GameView: View {
     
     
     
-    // restarts the game
+    //MARK: restarts the game
     
     func restartGame() {
+        
+        isNewHighScore = false
                 
        let newScene = GameScene(
             size: self.scene.size,
@@ -116,46 +129,72 @@ struct GameView: View {
                 
                 // create new highscore object
                 
-                let newScore = Highscore(
-                    name: "Oliver",
-                    points: finalScore,
-                    level: finalLevel
-                )
+                let topScores = highScore.prefix(5)
                 
-                // inser new highscore object
+                let qualifies = topScores.count < 5 || finalScore > (topScores.last?.points ?? 0)
                 
-                modelContext.insert(newScore)
-                
-                
-                // save data model with new highscore
-                
-                do {
+                if qualifies {
                     
-                    try modelContext.save()
+                    isNewHighScore = true
                     
-                    // print values to console while testing
+                    // delete old rank 5 before inserting
                     
-                    print("Gespeichert")
-                    print(newScore.name)
-                    print(newScore.points)
-                    print(newScore.level)
-                    
-                    // reload data model and print values to console while testing
-                    
-                    let descriptor = FetchDescriptor<Highscore>()
-                    let result = try modelContext.fetch(descriptor)
-                    
-                    print("Direkt gefunden:", result.count)
-                    
-                    for item in result {
-                        print(item.name, item.points, item.level)
+                    if highScore.count >= 5 {
+                        
+                        if let lowestScore = highScore.last {
+                            modelContext.delete(lowestScore)
+                            
+                            // print deleted values to console while testing
+                            
+                            print("Deleted:")
+                            print(lowestScore.points)
+                        }
                     }
                     
-                // catch errors
+                    let newScore = Highscore(
+                        name: "Oliver",
+                        points: finalScore,
+                        level: finalLevel
+                    )
                     
-                } catch {
-                    print(error)
-                }
+                    // inser new highscore object
+                    
+                    modelContext.insert(newScore)
+                    
+                    
+                    // save data model with new highscore
+                    
+                    do {
+                        
+                        try modelContext.save()
+                        
+                        // print values to console while testing
+                        
+                        print("Gespeichert")
+                        print(newScore.name)
+                        print(newScore.points)
+                        print(newScore.level)
+                        
+                        // reload data model and print values to console while testing
+                        
+                        let descriptor = FetchDescriptor<Highscore>()
+                        let result = try modelContext.fetch(descriptor)
+                        
+                        print("Direkt gefunden:", result.count)
+                        
+                        for item in result {
+                            print(item.name, item.points, item.level)
+                        }
+                        
+                    // catch errors
+                        
+                    } catch {
+                        print(error)
+                        
+                    }
+                }   else {
+                        isNewHighScore = false
+                    }
                 
                 self.finalScore = finalScore
                 self.finalLevel = finalLevel
