@@ -45,7 +45,8 @@ class GameScene: SKScene {
     
     var randomObjectValue = Int.random(in: 1...100)
     var objectType = "circle"
-    let fadeDuration = 0.1
+    let fadeInDuration = 0.15
+    let fadeOutDuration = 0.1
 
     // particles
     
@@ -123,8 +124,9 @@ class GameScene: SKScene {
         
         // Fade in animation
         
-        let fadeIn = SKAction.fadeIn(withDuration: fadeDuration)
-        let scaleUp = SKAction.scale(to: 1, duration: fadeDuration)
+        let fadeIn = SKAction.fadeIn(withDuration: fadeInDuration)
+        let scaleUp = SKAction.scale(to: 1, duration: fadeInDuration)
+        scaleUp.timingMode = .easeOut
         
         object.run(SKAction.group([fadeIn, scaleUp]))
         
@@ -133,8 +135,8 @@ class GameScene: SKScene {
         
         object.run(SKAction.sequence([
              SKAction.wait(forDuration: duration),
-             SKAction.scale(by: 0.1, duration: fadeDuration),
-             SKAction.fadeOut(withDuration: fadeDuration),
+             SKAction.scale(by: 0.1, duration: fadeOutDuration),
+             SKAction.fadeOut(withDuration: fadeOutDuration),
     
              
              SKAction.run { [weak self] in
@@ -172,7 +174,7 @@ class GameScene: SKScene {
         enumerateChildNodes(withName: "object") { (object, _) in
         object.removeAllActions()
 
-        let fade = SKAction.fadeOut(withDuration: self.fadeDuration)
+        let fade = SKAction.fadeOut(withDuration: self.fadeOutDuration)
         let remove = SKAction.removeFromParent()
         object.run(SKAction.sequence([
             fade,
@@ -291,8 +293,8 @@ class GameScene: SKScene {
                 
                 
                 // object fade out animation
-                let scaleUp = SKAction.scale(to: 1.5, duration: fadeDuration / 2)
-                let fadeOut = SKAction.fadeOut(withDuration: fadeDuration / 2)
+                let scaleUp = SKAction.scale(to: 1.5, duration: fadeOutDuration / 2)
+                let fadeOut = SKAction.fadeOut(withDuration: fadeOutDuration / 2)
                 let remove = SKAction.removeFromParent()
                 node.run(SKAction.sequence([scaleUp, fadeOut, remove]))
                 

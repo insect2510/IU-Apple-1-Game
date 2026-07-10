@@ -28,8 +28,8 @@ struct GameOverView: View {
     var body: some View {
         
         ZStack {
-          //  Color.darknight
-          //      .ignoresSafeArea()
+            Color.darknight
+             .ignoresSafeArea()
             
             VStack(spacing: 24) {
                 

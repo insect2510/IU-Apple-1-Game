@@ -30,6 +30,7 @@ struct GameView: View {
     private var highScore: [Highscore]
     
     @State private var randomPosition: [CGPoint] = []
+    @State private var animatedBackground = false
     
     
     init() {
@@ -63,6 +64,8 @@ struct GameView: View {
                 Color.darknight
                     .ignoresSafeArea()
                 
+                //MARK: random squares in the background
+                
                 ForEach(
                     randomPosition.indices,
                     id: \.self
@@ -70,12 +73,35 @@ struct GameView: View {
                 ) { index in
                     
                     Rectangle()
-                        .fill(.gold).opacity(0.2)
+                        .fill(.gold.opacity(0.2))
                         .frame(width: 60, height: 60)
-                        .position(randomPosition[index]
+                       // .position(randomPosition[index]
+                        
+                    
+                        .position(
+                            CGPoint(
+                                x: randomPosition[index].x,
+                                y: randomPosition[index].y
+                                + (animatedBackground ? 20: -20)
+                            )
                         )
+                        
+                        .animation(
+                            .easeInOut(
+                                duration: Double.random(
+                                    in: 5...10
+                                )
+                            )
+                        
+                            .repeatForever(
+                            autoreverses: true
+                            ),
+                            value: animatedBackground
+                    )
                 }
                 
+                
+                //MARK: Game Start
                 
                 if !isGaming {
                     GameStartView(restartAction: restartGame)
@@ -90,12 +116,17 @@ struct GameView: View {
                     }
                 }
                 
+                //MARK: gaming
+                
                 if isGaming {
+                    
                     ZStack (alignment:.top){
                         
                         SpriteView(scene: scene
                                    , options: [.allowsTransparency])
                             .ignoresSafeArea()
+                        
+                        // Game Header
                         
                         HStack {
                             
@@ -152,23 +183,39 @@ struct GameView: View {
                 }
                 
             }
+            
+            
             .onAppear {
+                
+                // random position for background shapes
+                
                 randomPosition = (1...10).map { _ in
                     
                     CGPoint(
                         x: CGFloat.random(
-                            in: 50...geometry.size.width - 50
+                            in: 50...(geometry.size.width - 50)
                         ),
                         y: CGFloat.random(
-                            in: 100...geometry.size.height - 100
+                            in: 100...(geometry.size.height - 100)
                         )
                     )
+                
                 }
+                
+                // trigger delay for animation
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1)
+                {
+                    animatedBackground = true
+                }
+                
+
+ 
             }
         }
     }
     
-    //MARK: restarts the game
+    //MARK: restart the game
     
     func restartGame() {
         
@@ -215,7 +262,7 @@ struct GameView: View {
                         level: finalLevel
                     )
                     
-                    // inser new highscore object
+                    // insert new highscore object
                     
                     modelContext.insert(newScore)
                     
@@ -274,7 +321,6 @@ struct GameView: View {
         
         gameIsOver = false
         isGaming = true
-        
     }
     
     
