@@ -106,7 +106,7 @@ class GameScene: SKScene {
             object.position = randomPoint()
             
         } else  {
-           object = SKShapeNode(rectOf: CGSize(width: 50, height: 50),
+           object = SKShapeNode(rectOf: CGSize(width: 60, height: 60),
                                      cornerRadius: 0)
             object.fillColor = .gold
             object.strokeColor = .clear
@@ -117,10 +117,19 @@ class GameScene: SKScene {
         // add gaming object to the view
         
         object.name = "object"
+        object.alpha = 0
+        object.setScale(0.1)
         addChild(object)
         
+        // Fade in animation
         
-        // set duration for object display
+        let fadeIn = SKAction.fadeIn(withDuration: fadeDuration)
+        let scaleUp = SKAction.scale(to: 1, duration: fadeDuration)
+        
+        object.run(SKAction.group([fadeIn, scaleUp]))
+        
+        
+        // set duration for object display and fade out
         
         object.run(SKAction.sequence([
              SKAction.wait(forDuration: duration),
