@@ -25,6 +25,7 @@ struct GameView: View {
     @State private var scene: GameScene
     
     init() {
+        
         let data = GameData()
         
         _gameData = StateObject(
@@ -85,56 +86,18 @@ struct GameView: View {
             }
             
             
-            
             if gameIsOver {
                 GameOverView(score: finalScore, level: finalLevel, restartAction: restartGame)
                     .id(gameData.score)
             }
         }
-        
-
-      /*  .onChange(of: gameIsOver) {_, newValue in
-            
-            if newValue {
-                let newScore = Highscore(
-                    name: "Oliver",
-                    points: finalScore,
-                    level: finalLevel
-                )
-                
-                modelContext.insert(newScore)
-                
-                do {
-                    try modelContext.save()
-                    
-                    print("Gespeichert")
-                    print(newScore.name)
-                    print(newScore.points)
-                    print(newScore.level)
-                    
-                    let descriptor = FetchDescriptor<Highscore>()
-                    let result = try modelContext.fetch(descriptor)
-                    
-                    print("Direkt gefunden:", result.count)
-                    
-                    for item in result {
-                        print(item.name, item.points, item.level)
-                    }
-                    
-                } catch {
-                    print(error)
-                }
-                
-                
-            }
-            
-        }
-       */
+    
     }
     
     
     
     // restarts the game
+    
     func restartGame() {
                 
        let newScene = GameScene(
@@ -148,11 +111,7 @@ struct GameView: View {
             
             DispatchQueue.main.async {
                 
-               /* finalScore = score
-                finalLevel = level
-                
-                gameIsOver = true
-                isGaming = false*/
+                // create new highscore object
                 
                 let newScore = Highscore(
                     name: "Oliver",
@@ -160,15 +119,25 @@ struct GameView: View {
                     level: finalLevel
                 )
                 
+                // inser new highscore object
+                
                 modelContext.insert(newScore)
                 
+                
+                // save data model with new highscore
+                
                 do {
+                    
                     try modelContext.save()
+                    
+                    // print values to console while testing
                     
                     print("Gespeichert")
                     print(newScore.name)
                     print(newScore.points)
                     print(newScore.level)
+                    
+                    // reload data model and print values to console while testing
                     
                     let descriptor = FetchDescriptor<Highscore>()
                     let result = try modelContext.fetch(descriptor)
@@ -179,6 +148,8 @@ struct GameView: View {
                         print(item.name, item.points, item.level)
                     }
                     
+                // catch errors
+                    
                 } catch {
                     print(error)
                 }
@@ -188,8 +159,6 @@ struct GameView: View {
                 
                 gameIsOver = true
                 isGaming = false
-                
-                
                
             }
         }
@@ -209,6 +178,8 @@ struct GameView: View {
         
     }
     
+    
+    // format time into string
     
     func formatTime(_ seconds:Int) -> String {
         

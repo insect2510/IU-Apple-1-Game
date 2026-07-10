@@ -95,8 +95,6 @@ struct GameOverView: View {
                     
                 }
                 
-
-                
             
                 // Show Restart Button
                 
