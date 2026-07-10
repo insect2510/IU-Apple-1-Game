@@ -93,8 +93,7 @@ struct GameOverView: View {
                         .foregroundColor(.warmwhite)
                         .onAppear {
                             
-                            let soundIdHighscore = 1025
-                            AudioServicesPlaySystemSound(SystemSoundID(soundIdHighscore))
+                            AudioServicesPlaySystemSound(SystemSoundID(GameSound.highScore))
                         }
                     
 
@@ -107,8 +106,7 @@ struct GameOverView: View {
                         .foregroundColor(.warmwhite)
                         .onAppear {
                             
-                            let soundIdHighscore = 1021
-                            AudioServicesPlaySystemSound(SystemSoundID(soundIdHighscore))
+                            AudioServicesPlaySystemSound(SystemSoundID(GameSound.fail))
                         }
                     
                 }

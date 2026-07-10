@@ -45,14 +45,7 @@ class GameScene: SKScene {
     var randomObjectValue = Int.random(in: 1...100)
     var objectType = "circle"
     let fadeDuration = 0.1
-    
-    // sound ids
-    
-    let soundIdCircle:SystemSoundID = 1052      // normal touch
-    let soundIdSquare:SystemSoundID = 1007     // bonus touch
-    let soundIdMissTouch:SystemSoundID = 1000   // touch missed
-    let soundIdGameOver:SystemSoundID = 1021    // game over
-    
+
     // particles
     
     var particleFileName = "ParticleFire"
@@ -153,7 +146,7 @@ class GameScene: SKScene {
                      
                      // play audio file
                      
-                     AudioServicesPlaySystemSound(self.soundIdMissTouch)
+                     AudioServicesPlaySystemSound(GameSound.missTouch)
                      
                      self.randomObject()
                  }
@@ -223,13 +216,15 @@ class GameScene: SKScene {
                 // particle animation
                 // for square object
                 if objectType == "square" {
+                    
                     particleFileName = "ParticleMagic"
-                    soundId = soundIdSquare
+                    soundId = GameSound.square
                 }
                 // for cirlce object
                 else if objectType == "circle" {
-                particleFileName = "ParticleFire"
-                soundId = soundIdCircle
+                    
+                    particleFileName = "ParticleFire"
+                    soundId = GameSound.circle
 
             }
                 // start particle anmiation based on object type
