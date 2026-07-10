@@ -32,6 +32,7 @@ struct GameView: View {
     @State private var randomPosition: [CGPoint] = []
     @State private var animatedBackground = false
     
+    @State private var showLevelUp = false
     
     init() {
         
@@ -75,9 +76,9 @@ struct GameView: View {
                     Rectangle()
                         .fill(.gold.opacity(0.2))
                         .frame(width: 60, height: 60)
+                    
                        // .position(randomPosition[index]
                         
-                    
                         .position(
                             CGPoint(
                                 x: randomPosition[index].x,
@@ -85,7 +86,9 @@ struct GameView: View {
                                 + (animatedBackground ? 20: -20)
                             )
                         )
-                        
+                    
+                        // start animation
+                            
                         .animation(
                             .easeInOut(
                                 duration: Double.random(
@@ -182,8 +185,61 @@ struct GameView: View {
                     }
                 }
                 
+                
+                //MARK: show new level with animation
+                
+                if showLevelUp {
+                    Text("LEVEL \(gameData.level)")
+                        .font(
+                            .system(
+                                .largeTitle,
+                                weight: .black
+                            )
+                        )
+                        .tracking(6)
+                        .foregroundColor(.darknight)
+                        .padding(.horizontal, 40)
+                        .padding(.vertical, 20)
+                        .background(
+                            Capsule()
+                                .fill(.gold)
+                            )
+                    
+                        .scaleEffect(showLevelUp ? 1.2 : 0.5)
+                        .opacity(showLevelUp ? 1 : 0)
+                        .transition(.scale)
+                        .zIndex(100)
+                }
+                
             }
             
+            
+            //MARK: check if gameLevel has changed
+            
+            .onChange(of: gameData.level) { _, newLevel in
+
+                if newLevel > 1 {
+                    
+                    withAnimation(
+                        .spring(
+                            response: 0.4,
+                            dampingFraction: 0.5
+                        )
+                    ) {
+                        showLevelUp = true
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(
+                        deadline: .now() + 0.7
+                    ) {
+                        withAnimation {
+                            showLevelUp = false
+                        }
+                        
+                    }
+                }
+                
+            }
             
             .onAppear {
                 
