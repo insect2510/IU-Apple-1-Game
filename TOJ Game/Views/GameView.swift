@@ -29,6 +29,8 @@ struct GameView: View {
     @Query(sort: \Highscore.points, order: .reverse)
     private var highScore: [Highscore]
     
+    @State private var randomPosition: [CGPoint] = []
+    
     
     init() {
         
@@ -54,61 +56,117 @@ struct GameView: View {
     
     var body: some View {
         
-        ZStack {
+        GeometryReader { geometry in
             
-            if !isGaming {
-                GameStartView(restartAction: restartGame)
+            ZStack {
+                
+                Color.darknight
+                    .ignoresSafeArea()
+                
+                ForEach(
+                    randomPosition.indices,
+                    id: \.self
+                    
+                ) { index in
+                    
+                    Rectangle()
+                        .fill(.gold).opacity(0.2)
+                        .frame(width: 60, height: 60)
+                        .position(randomPosition[index]
+                        )
+                }
                 
                 
-                if gameIsOver {
-                    GameOverView(score: finalScore,
-                                 level: finalLevel,
-                                 isNewHighScore: isNewHighScore,
-                                 restartAction: restartGame)
+                if !isGaming {
+                    GameStartView(restartAction: restartGame)
+                    
+                    
+                    if gameIsOver {
+                        GameOverView(score: finalScore,
+                                     level: finalLevel,
+                                     isNewHighScore: isNewHighScore,
+                                     restartAction: restartGame)
                         .id(gameData.score)
-                }
-            }
-            
-            if isGaming {
-                ZStack (alignment:.top){
-                    
-                    SpriteView(scene: scene)
-                        .ignoresSafeArea()
-                    
-                    
-                    HStack {
-                        Text("Score: \(gameData.score)")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        
-
-                        Text("Lives: \(gameData.lives)")
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                        
-
-                        
-                        Text("Level: \(gameData.level)")
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                        
-                        
-                        
-                        Text(formatTime(gameData.timeRemaining))
-                            .frame(maxWidth: .infinity, alignment: .trailing)
                     }
-                    .font(.system(.title3, weight: .light))
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(height: 80)
-                    .background(LinearGradient(colors: [.lightnight, .darknight], startPoint: .top, endPoint: .bottom))
+                }
+                
+                if isGaming {
+                    ZStack (alignment:.top){
+                        
+                        SpriteView(scene: scene
+                                   , options: [.allowsTransparency])
+                            .ignoresSafeArea()
+                        
+                        HStack {
+                            
+                            Label(
+                                "\(gameData.score)",
+                                systemImage: "star.fill"
+                            )
+                            .frame(
+                                maxWidth: .infinity,
+                                alignment: .leading
+                            )
+                            
+                            Label(
+                                "\(gameData.lives)",
+                                systemImage: "heart.fill"
+                            )
+                            .frame(
+                                width: 60
+                            )
+                            
+                            Label(
+                                "\(gameData.level)",
+                                systemImage: "bolt.fill"
+                            )
+                            
+                            .frame(
+                                width: 60
+                            )
+                            
+                            
+                            Text(formatTime(gameData.timeRemaining))
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                            
+                        }
+                        
+                        .font(
+                            .system(
+                                .title3,
+                                weight: .light
+                            )
+                        )
+                        .foregroundColor(.warmwhite)
+                        .padding(.horizontal, 20)
+                        .frame(height: 80)
+                        .background(
+                            LinearGradient(
+                                colors: [
+                                    .lightnight,
+                                    .darknight
+                                ],
+                                startPoint: .top,
+                                endPoint: .bottom))
+                    }
+                }
+                
+            }
+            .onAppear {
+                randomPosition = (1...10).map { _ in
                     
+                    CGPoint(
+                        x: CGFloat.random(
+                            in: 50...geometry.size.width - 50
+                        ),
+                        y: CGFloat.random(
+                            in: 100...geometry.size.height - 100
+                        )
+                    )
                 }
             }
-            
-
         }
-    
     }
-    
-    
     
     //MARK: restarts the game
     
@@ -201,7 +259,6 @@ struct GameView: View {
                 
                 gameIsOver = true
                 isGaming = false
-               
             }
         }
         
@@ -229,9 +286,8 @@ struct GameView: View {
             format:"%02d:%02d",
             seconds / 60,
             seconds % 60
-            )
+        )
     }
-
 }
 
 #Preview {

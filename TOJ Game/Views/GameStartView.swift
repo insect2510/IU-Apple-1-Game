@@ -13,6 +13,8 @@ struct GameStartView: View {
     
    // let score: Int
    let restartAction: () -> Void
+    
+   // @State private var randomPosition: [CGPoint] = []
 
     // game is not running
     var isGaming: Bool = false
@@ -21,47 +23,44 @@ struct GameStartView: View {
     // MARK: game start view
     
     var body: some View {
-        
-        ZStack {
-            Color.darknight
-                .ignoresSafeArea()
             
-            VStack(spacing: 32) {
+            ZStack {
                 
-                // Display game name
-                
-                Text("TOJ")
-                    .font(.system(.largeTitle, weight: .black))
-                    .foregroundColor(.warmwhite)
-                    .scaleEffect(1.5)
+                VStack(spacing: 32) {
+                    
+                    // Display game name
+                    
+                    Text("TOJ")
+                        .font(.system(.largeTitle, weight: .black))
+                        .foregroundColor(.warmwhite)
+                        .scaleEffect(1.5)
 
-                Text("Touch the object")
-                    .font(.system(.title, weight: .medium))
-                    .foregroundColor(.warmwhite)
-                
-                
-                // show start button
-                
-                Button {
-                    restartAction()
+                    Text("Touch the object")
+                        .font(.system(.title, weight: .medium))
+                        .foregroundColor(.warmwhite)
                     
-                } label:  {
                     
-                    Text("Start Play")
+                    // show start button
                     
-                    .textCase(.uppercase)
-                    .font(.system(.title3, weight: .light))
-                    .padding(.horizontal, 32)
-                    .padding(.vertical, 18)
-                    .background(
-                        Capsule()
-                            .fill(.darkcyan)
-                        )
-                    .foregroundColor(.warmwhite)
-                    
+                    Button {
+                        restartAction()
+                        
+                    } label:  {
+                        
+                        Text("Start Play")
+                        
+                        .textCase(.uppercase)
+                        .font(.system(.title3, weight: .light))
+                        .padding(.horizontal, 32)
+                        .padding(.vertical, 18)
+                        .background(
+                            Capsule()
+                                .fill(.darkcyan)
+                            )
+                        .foregroundColor(.warmwhite)
+                        
+                    }
                 }
-                
-            }
         }
     }
 }

@@ -35,6 +35,7 @@ class GameScene: SKScene {
     
     var duration = 4.0
     var gameIsOver = false
+    var levelUp = false
     
     // Timer
     
@@ -53,9 +54,9 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
-        // background color for scene
+        // background clear for scene
         
-        backgroundColor = .darknight
+        backgroundColor = .clear
         
         // Timer Setup
         
@@ -189,44 +190,80 @@ class GameScene: SKScene {
     
         // update score and check for new duration
         for node in nodes {
+            
             if node.name == "object" {
+                
                 if objectType == "circle" {
                     self.gameData.score += 1 } else {
                         self.gameData.score += 10
                     }
             
-                if   gameData.score >= 15 {
+                if  gameData.score >= 50 && gameData.level < 2 {
                     duration = 3.0
                     gameData.level = 2
+                    levelUp = true
                 }
                 
-                if   gameData.score >= 30 {
+                if   gameData.score >= 100 && gameData.level < 3 {
                     duration = 2.0
                     gameData.level = 3
+                    levelUp = true
+                
                 }
                 
-                if  gameData.score >= 50 {
+                if  gameData.score >= 150 && gameData.level < 4  {
                     duration = 1.0
                     gameData.level = 4
+                    levelUp = true
+                
                 }
                 
                 
                 // animation after touching
                 
-                // particle animation
+
+
                 // for square object
                 if objectType == "square" {
                     
+                    // particle animation
+                    
                     particleFileName = "ParticleMagic"
-                    soundId = GameSound.square
+                    
+                    // play audio for square
+                    
+                    if levelUp == false {
+                        soundId = GameSound.square
+                        
+                    } else {
+                        soundId = GameSound.levelUp
+                        levelUp = false
+                    }
+                
                 }
+                
                 // for cirlce object
+                
                 else if objectType == "circle" {
                     
+                    // particle animation
+                    
                     particleFileName = "ParticleFire"
-                    soundId = GameSound.circle
-
-            }
+                    
+                    // play audio for circle
+                    
+                    if levelUp == false {
+                        soundId = GameSound.circle
+                        
+                    } else {
+                        
+                        soundId = GameSound.levelUp
+                        levelUp = false
+                    }
+  
+                }
+                
+                
                 // start particle anmiation based on object type
                 if let particles = SKEmitterNode(fileNamed: particleFileName) {
                 particles.position = node.position

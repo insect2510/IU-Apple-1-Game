@@ -15,6 +15,7 @@ enum GameSound {
     
     static let circle: SystemSoundID = 1052      // normal touch
     static let square: SystemSoundID = 1007     // bonus touch
+    static let levelUp: SystemSoundID = 1016     // bonus touch
     
     static let missTouch: SystemSoundID = 1000   // touch missed
     
