@@ -23,7 +23,9 @@ class GameScene: SKScene {
         fatalError("init(coder:) has not been implemented")
     }
     
-    var gameOverHandler: ((Int) -> Void)?
+    
+    // gameOverHandller
+    var gameOverHandler: ((Int, Int) -> Void)?
     
     // Duratian at the start of the game in seconds
     var duration = 4.0
@@ -177,14 +179,17 @@ class GameScene: SKScene {
             
                 if   gameData.score >= 15 {
                     duration = 3.0
+                    gameData.level = 2
                 }
                 
                 if   gameData.score >= 30 {
                     duration = 2.0
+                    gameData.level = 3
                 }
                 
                 if  gameData.score >= 50 {
                     duration = 1.0
+                    gameData.level = 4
                 }
                 
                 
@@ -254,9 +259,11 @@ class GameScene: SKScene {
         
         gameIsOver = true
         
+        gameTime?.invalidate()
+        
         // call remove all objects function
         removeObject()
-        gameOverHandler?(gameData.score)
+        gameOverHandler?(gameData.score, gameData.level)
 
     }
 

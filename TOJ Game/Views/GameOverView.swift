@@ -19,6 +19,7 @@ struct GameOverView: View {
 
     
     let score: Int
+    let level: Int
     let restartAction: () -> Void
     
     
@@ -40,26 +41,61 @@ struct GameOverView: View {
                     .font(.system(size: 24, weight: .medium))
                     .foregroundColor(.warmwhite)
                 
-                Text("Einträge: \(highScore.count)")
-                    .foregroundColor(.grey)
+                Text("Your level: \(level)")
+                    .font(.system(size: 24, weight: .medium))
+                    .foregroundColor(.warmwhite)
                 
-              
+              // show Top 5 Highscore
+                
+                VStack {
+                    
+                    Text("Top 5")
+                    
+                        .font(.system(size: 28, weight: .black))
+                        .foregroundColor(.black)
+                    
                     List {
-                        ForEach(highScore) { entry in
+                        
+                        HStack {
+                            
+                            Text("Name")
+                                .bold()
+                            
+                            Spacer()
+                            
+                            Text("Score")
+                                .bold()
+                                 
+                            Spacer()
+                                 
+                            Text("Level")
+                                .bold()
+                            
+                        }
+                        
+                        ForEach(highScore.prefix(5)) { entry in
                             HStack {
                                 Text(entry.name)
-                                    .bold()
                                     .foregroundColor(.black)
                                 
                                 Spacer()
                                 
                                 Text("\(entry.points)")
-                                    .bold()
+                                    .foregroundColor(.black)
+                                
+                                Spacer()
+                                
+                                Text("\(entry.level)")
                                     .foregroundColor(.black)
                             }
                         }
                     }
-                    .frame(height: 300)
+                    .frame(height: 250)
+                    
+                    
+                }
+                
+
                 
             
                 // Show Restart Button

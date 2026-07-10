@@ -11,24 +11,14 @@ import SwiftData
 @Model
 class Highscore {
     
-    var name: String
-    var points: Int
+    var name: String = ""
+    var points: Int = 0
+    var level: Int = 1
     
-    init(name: String, points: Int) {
+    init(name: String, points: Int, level: Int) {
         self.name = name
         self.points = points
+        self.level = level
     }
     
 }
-
-extension Highscore {
-    static let sampleData = [
-
-       Highscore(name: "Oliver", points: 10),
-       Highscore(name: "Marco", points: 100),
-       Highscore(name: "Janet", points: 321),
-        
-    ]
-}
-
-
