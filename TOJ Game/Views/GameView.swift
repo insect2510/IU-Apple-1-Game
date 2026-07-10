@@ -1,7 +1,7 @@
 //
 //  TOJ Game
-//  GamePlayView.swift
-//  GamePlayView
+//  GameView.swift
+//  GameView
 //
 //  Created by Oliver Hartmann on 25.06.26.
 //
@@ -10,7 +10,7 @@ import SwiftUI
 import SpriteKit
 import SwiftData
 
-struct GamePlayView: View {
+struct GameView: View {
     
     @Environment(\.modelContext) private var modelContext
     
@@ -161,5 +161,5 @@ struct GamePlayView: View {
 }
 
 #Preview {
-    GamePlayView()
+    GameView()
 }

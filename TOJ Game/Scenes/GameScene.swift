@@ -92,13 +92,13 @@ class GameScene: SKScene {
             object = SKShapeNode(circleOfRadius: 30)
             object.fillColor = .warmwhite
             object.position = randomPoint()
+            
         } else  {
            object = SKShapeNode(rectOf: CGSize(width: 50, height: 50),
                                      cornerRadius: 0)
             object.fillColor = .gold
             object.strokeColor = .clear
             object.position = randomPoint()
-
         }
         
         // add gaming object to the view

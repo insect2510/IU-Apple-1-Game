@@ -13,7 +13,7 @@ struct TojGame: App {
     
     var body: some Scene {
         WindowGroup {
-            GamePlayView()
+            GameView()
         }
                 .modelContainer(for: Highscore.self)
        

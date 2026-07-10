@@ -53,5 +53,5 @@ struct GameStartView: View {
 }
 
 //#Preview {
-//   GameStartView()
+//   GameStartView(restartAction)
 //}
