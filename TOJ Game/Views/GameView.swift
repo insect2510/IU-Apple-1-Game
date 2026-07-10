@@ -50,33 +50,40 @@ struct GameView: View {
             
             if !isGaming {
                 GameStartView(restartAction: restartGame)
+                
+                
+                if gameIsOver {
+                    GameOverView(score: finalScore, level: finalLevel, restartAction: restartGame)
+                        .id(gameData.score)
+                }
             }
             
             if isGaming {
                 ZStack (alignment:.top){
                     
                     SpriteView(scene: scene)
-                    // .id(sceneID)
                         .ignoresSafeArea()
                     
                     
                     HStack {
                         Text("Score: \(gameData.score)")
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        Spacer()
-                        
+
                         Text("Lives: \(gameData.lives)")
+                            .frame(maxWidth: .infinity, alignment: .trailing)
                         
-                        Spacer()
+
                         
                         Text("Level: \(gameData.level)")
+                            .frame(maxWidth: .infinity, alignment: .trailing)
                         
-                        Spacer()
                         
                         
                         Text(formatTime(gameData.timeRemaining))
+                            .frame(maxWidth: .infinity, alignment: .trailing)
                     }
-                    .font(.title3)
+                    .font(.system(.title3, weight: .light))
                     .foregroundColor(.white)
                     .padding()
                     .frame(height: 80)
@@ -85,11 +92,7 @@ struct GameView: View {
                 }
             }
             
-            
-            if gameIsOver {
-                GameOverView(score: finalScore, level: finalLevel, restartAction: restartGame)
-                    .id(gameData.score)
-            }
+
         }
     
     }

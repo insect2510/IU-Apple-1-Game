@@ -20,7 +20,7 @@ struct GameStartView: View {
     var body: some View {
         
         ZStack {
-            Color.darkred
+            Color.darknight
                 .ignoresSafeArea()
             
             VStack(spacing: 32) {
@@ -28,24 +28,35 @@ struct GameStartView: View {
                 // Display game name
                 
                 Text("TOJ")
-                    .font(.system(size: 48, weight: .black))
+                    .font(.system(.largeTitle, weight: .black))
                     .foregroundColor(.warmwhite)
+                    .scaleEffect(1.5)
+
                 Text("Touch the object")
-                    .font(.system(size: 24, weight: .medium))
+                    .font(.system(.title, weight: .medium))
                     .foregroundColor(.warmwhite)
                 
                 
                 // show start button
                 
-                Button("Start Game") {
+                Button {
+                    restartAction()
                     
-            restartAction()
-
+                } label:  {
+                    
+                    Text("Start Play")
+                    
+                    .textCase(.uppercase)
+                    .font(.system(.title3, weight: .light))
+                    .padding(.horizontal, 32)
+                    .padding(.vertical, 18)
+                    .background(
+                        Capsule()
+                            .fill(.darkcyan)
+                        )
+                    .foregroundColor(.warmwhite)
+                    
                 }
-                .font(.system(size: 24, weight: .medium))
-                .padding(24)
-                .background(.darkcyan)
-                .foregroundColor(.warmwhite)
                 
             }
         }
