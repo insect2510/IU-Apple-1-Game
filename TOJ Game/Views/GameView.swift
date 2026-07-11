@@ -238,7 +238,6 @@ struct GameView: View {
                         
                     }
                 }
-                
             }
             
             .onAppear {

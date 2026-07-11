@@ -35,7 +35,6 @@ class GameScene: SKScene {
     
     var duration = 4.0
     var gameIsOver = false
-    var levelUp = false
     
     // Timer
     
@@ -191,6 +190,8 @@ class GameScene: SKScene {
         return CGPoint(x: x, y: y)
     }
     
+    
+    
     //MARK: Game Play
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
@@ -203,89 +204,66 @@ class GameScene: SKScene {
         for node in nodes {
             
             if node.name == "object" {
-                
-                if objectType == "circle" {
-                    self.gameData.score += 1 } else {
-                        self.gameData.score += 10
-                    }
-            
-                if  gameData.score >= 50 && gameData.level < 2 {
-                    duration = 3.0
-                    gameData.level = 2
-                    levelUp = true
-                }
-                
-                if   gameData.score >= 100 && gameData.level < 3 {
-                    duration = 2.0
-                    gameData.level = 3
-                    levelUp = true
-                
-                }
-                
-                if  gameData.score >= 150 && gameData.level < 4  {
-                    duration = 1.0
-                    gameData.level = 4
-                    levelUp = true
-                
-                }
-                
+
                 
                 // animation after touching
                 
-
-
-                // for square object
-                if objectType == "square" {
+                switch objectType {
                     
-                    // particle animation
-                    
-                    particleFileName = "ParticleMagic"
-                    
-                    // play audio for square
-                    
-                    if levelUp == false {
-                        soundId = GameSound.square
-                        
-                    } else {
-                        soundId = GameSound.levelUp
-                        levelUp = false
-                    }
-                
-                }
-                
-                // for cirlce object
-                
-                else if objectType == "circle" {
-                    
-                    // particle animation
-                    
+                // for circle
+                   
+                case "circle":
+                    gameData.score += 1
                     particleFileName = "ParticleFire"
                     
-                    // play audio for circle
+                // for square
                     
-                    if levelUp == false {
-                        soundId = GameSound.circle
-                        
-                    } else {
-                        
-                        soundId = GameSound.levelUp
-                        levelUp = false
-                    }
-  
+                case "square":
+                    gameData.score += 10
+                    particleFileName = "ParticleMagic"
+                    
+                default: break
+                    
                 }
                 
                 
+                // sound after touching
+                
+              let didLevelUp =  checkLevelUp()
+                
+                switch objectType {
+                    
+                // for circle
+                   
+                case "circle":
+                    soundId = didLevelUp ? GameSound.levelUp : GameSound.circle
+                    
+                // for square
+                    
+                case "square":
+                    soundId = didLevelUp ? GameSound.levelUp : GameSound.square
+                    
+                default: break
+                    
+                }
+                
+
+                
                 // start particle anmiation based on object type
+                
                 if let particles = SKEmitterNode(fileNamed: particleFileName) {
                 particles.position = node.position
                 
                 // add audio
+                    
                 AudioServicesPlaySystemSound(SystemSoundID(soundId))
                 
                 // add particle
+                    
                 addChild(particles)
                     
                 // wait and remove particle node
+                    
                 let removeParticle = SKAction.sequence([SKAction.wait(forDuration: 2),
                                                         SKAction.removeFromParent()])
                 particles.run(removeParticle)
@@ -293,6 +271,7 @@ class GameScene: SKScene {
                 
                 
                 // object fade out animation
+                
                 let scaleUp = SKAction.scale(to: 1.5, duration: fadeOutDuration / 2)
                 let fadeOut = SKAction.fadeOut(withDuration: fadeOutDuration / 2)
                 let remove = SKAction.removeFromParent()
@@ -307,6 +286,7 @@ class GameScene: SKScene {
     
     
     //MARK: ramdomly choose circle or square for object type
+    
     func randomObject() {
         
         randomObjectValue = Int.random(in: 1...100)
@@ -323,18 +303,43 @@ class GameScene: SKScene {
     
     
     //MARK: end of the game
+    
     func endGame() {
         
         gameIsOver = true
         
         gameTime?.invalidate()
-        
-       // AudioServicesPlaySystemSound(self.soundIdGameOver)
-        
+                
         // call remove all objects function
         removeObject()
         gameOverHandler?(gameData.score, gameData.level)
 
+    }
+    
+    
+    //MARK: check level up
+    
+    func checkLevelUp() -> Bool {
+        
+        switch gameData.score {
+            
+        case 80... where gameData.level < 4:
+            duration = 1.0
+            gameData.level = 4
+            return true
+            
+        case 50... where gameData.level < 3:
+            duration = 2.0
+            gameData.level = 3
+            return true
+            
+        case 20... where gameData.level < 2:
+            duration = 3.0
+            gameData.level = 2
+            return true
+            
+        default: return false
+        }
     }
 
 }
