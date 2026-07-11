@@ -24,3 +24,7 @@ enum GameSound {
     
 }
 
+enum GameText {
+    static let higScore: String = "Congrats, you made it into the TOP5!" // Text for new highscore
+    static let fail: String = "Sorry, you didn't make it in the TOP5!" // Text for not a new highscore
+}

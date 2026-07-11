@@ -106,22 +106,23 @@ struct GameView: View {
                 
                 //MARK: Game Start
                 
-                if !isGaming {
-                    GameStartView(restartAction: restartGame)
+                if gameIsOver {
+                    GameOverView(score: finalScore,
+                                 level: finalLevel,
+                                 isNewHighScore: isNewHighScore,
+                                 restartAction: restartGame)
+                //    .id(gameData.score)
                     
+                } else if !isGaming {
                     
-                    if gameIsOver {
-                        GameOverView(score: finalScore,
-                                     level: finalLevel,
-                                     isNewHighScore: isNewHighScore,
-                                     restartAction: restartGame)
-                        .id(gameData.score)
-                    }
+                    GameStartView(
+                        restartAction: restartGame
+                    )
                 }
                 
                 //MARK: gaming
                 
-                if isGaming {
+                else {
                     
                     ZStack (alignment:.top){
                         

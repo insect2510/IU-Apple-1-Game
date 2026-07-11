@@ -12,7 +12,9 @@ import SwiftData
 struct TojGame: App {
     
     var body: some Scene {
+        
         WindowGroup {
+            
             GameView()
         }
                 .modelContainer(for: Highscore.self)
