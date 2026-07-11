@@ -111,7 +111,7 @@ struct GameView: View {
                                  level: finalLevel,
                                  isNewHighScore: isNewHighScore,
                                  restartAction: restartGame)
-                //    .id(gameData.score)
+
                     
                 } else if !isGaming {
                     
