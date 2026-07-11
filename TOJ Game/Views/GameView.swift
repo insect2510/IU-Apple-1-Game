@@ -193,16 +193,16 @@ struct GameView: View {
                         .font(
                             .system(
                                 .largeTitle,
-                                weight: .black
+                                weight: .medium
                             )
                         )
                         .tracking(6)
-                        .foregroundColor(.darknight)
+                        .foregroundColor(.warmwhite)
                         .padding(.horizontal, 40)
                         .padding(.vertical, 20)
                         .background(
                             Capsule()
-                                .fill(.gold)
+                                .fill(.darkred)
                             )
                     
                         .scaleEffect(showLevelUp ? 1.2 : 0.5)
