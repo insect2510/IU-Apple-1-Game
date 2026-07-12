@@ -279,8 +279,59 @@ struct GameView: View {
         
         let newScene = createScene()
         
+        configureGameOverHandler(for: newScene)
         
-        newScene.gameOverHandler = { finalScore, finalLevel in
+        // Reset game data values
+        
+        resetGameData()
+        
+        startGame(with: newScene)
+        
+    }
+    
+    
+    // Reset game data values
+    
+    func resetGameData() {
+        gameData.score = 0
+        gameData.lives = 3
+        gameData.timeRemaining = 60
+        gameData.level = 1
+
+    }
+    
+    // start the game
+    
+    func startGame(with scene: GameScene) {
+        
+        self.scene = scene
+        
+        gameIsOver = false
+        isGaming = true
+        
+    }
+    
+    // create a new game scene
+    
+    func createScene() -> GameScene {
+        
+       let scene = GameScene(
+        size: self.scene.size,
+        gameData: gameData
+       )
+        
+        scene.scaleMode = .resizeFill
+        
+        return scene
+        
+    }
+    
+    func configureGameOverHandler(
+        for scene: GameScene
+        
+    ) {
+        
+        scene.gameOverHandler = { finalScore, finalLevel in
             
             DispatchQueue.main.async {
                 
@@ -360,52 +411,8 @@ struct GameView: View {
                 isGaming = false
             }
         }
-        
-        
-        // Reset game data values
-        
-        resetGameData()
-        
-        startGame(with: newScene)
-        
     }
     
-    
-    // Reset game data values
-    
-    func resetGameData() {
-        gameData.score = 0
-        gameData.lives = 3
-        gameData.timeRemaining = 60
-        gameData.level = 1
-
-    }
-    
-    // start the game
-    
-    func startGame(with scene: GameScene) {
-        
-        self.scene = scene
-        
-        gameIsOver = false
-        isGaming = true
-        
-    }
-    
-    // create a new game scene
-    
-    func createScene() -> GameScene {
-        
-       let scene = GameScene(
-        size: self.scene.size,
-        gameData: gameData
-       )
-        
-        scene.scaleMode = .resizeFill
-        
-        return scene
-        
-    }
     
     
     // format time into string
