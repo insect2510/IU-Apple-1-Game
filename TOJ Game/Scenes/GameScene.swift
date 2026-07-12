@@ -54,13 +54,13 @@ class GameScene: SKScene {
         // Timer Setup
         
         startTimer()
-        drawObject(objectType: objectType)
+        drawObject()
     }
     
     
     // Start Timer
     
-    func startTimer() {
+    private func startTimer() {
         
         gameTime?.invalidate()
         
@@ -86,78 +86,41 @@ class GameScene: SKScene {
     
     //MARK:  Draw a circle with random coordinates
     
-    func drawObject(objectType: ObjectType) {
-        
+    private func drawObject() {
         
         // draw circle or square
         
         let object = createObject(of: objectType)
         
-        // add gaming object to the view
-        object.position = randomPoint()
-        object.name = "object"
-        object.alpha = 0
-        object.setScale(0.1)
-        addChild(object)
+        configureObject(object)
         
         // Fade in animation
         
-        let fadeIn = SKAction.fadeIn(withDuration: ObjectData.fadeInDuration)
-        let scaleUp = SKAction.scale(to: 1, duration: ObjectData.fadeInDuration)
-        scaleUp.timingMode = .easeOut
-        object.run(SKAction.group([fadeIn, scaleUp]))
-        
+        animateAppearance(of: object)
         
         // set duration for object display and fade out
         
-        object.run(SKAction.sequence([
-            SKAction.wait(forDuration: duration),
-            SKAction.scale(by: 0.1, duration: ObjectData.fadeOutDuration),
-            SKAction.fadeOut(withDuration: ObjectData.fadeOutDuration),
-            SKAction.run { [weak self] in
-                
-                guard let self = self else { return }
-                
-                // remove one  life if no touch on the object has been detected
-                
-                self.gameData.lives -= 1
-                
-                
-                // check Game Over
-                
-                if self.gameData.lives <= 0 {
-                    self.endGame()
-                    
-                } else {
-                    
-                    // play audio file
-                    
-                    AudioServicesPlaySystemSound(GameSound.missTouch)
-                    
-                    self.randomObject()
-                }
-            },
-            SKAction.removeFromParent()
-        ]))
+        scheduleRemoval(of: object)
     }
     
-    func createObject(
+    
+    // draw circle or square
+    
+   private func createObject(
         
         of type: ObjectType
         
     )  -> SKShapeNode {
         
-        // draw circle or square
-        
         let object: SKShapeNode
         
-        switch objectType {
+        switch type {
             
-        case ObjectType.circle:
+        case .circle:
             object = SKShapeNode(circleOfRadius: ObjectData.circleRadius)
             object.fillColor = .warmwhite
             
-        case ObjectType.square:
+        case .square:
             object = SKShapeNode(rectOf: CGSize(width: ObjectData.squareSize, height: ObjectData.squareSize),
                                  cornerRadius: 0)
             object.fillColor = .gold
@@ -170,9 +133,81 @@ class GameScene: SKScene {
     }
     
     
+    // add gaming object to the view
+    
+   private func configureObject(_ object: SKShapeNode) {
+        
+        object.position = randomPoint()
+        object.name = "object"
+        object.alpha = 0
+        object.setScale(0.1)
+        addChild(object)
+    }
+    
+    // fade in animation
+    
+   private func animateAppearance(of object: SKShapeNode) {
+        
+        let fadeIn = SKAction.fadeIn(withDuration: ObjectData.fadeInDuration)
+        let scaleUp = SKAction.scale(to: 1, duration: ObjectData.fadeInDuration)
+        scaleUp.timingMode = .easeOut
+        object.run(SKAction.group([fadeIn, scaleUp]))
+        
+    }
+    
+    // fade out animation
+    
+   private func animateFadeOut(of object: SKNode) {
+        
+        let scaleUp = SKAction.scale(to: 1.5, duration: ObjectData.fadeOutDuration)
+        let fadeOut = SKAction.fadeOut(withDuration: ObjectData.fadeOutDuration)
+        let remove = SKAction.removeFromParent()
+        object.run(SKAction.sequence([scaleUp, fadeOut, remove]))
+    }
+    
+    
+   private func scheduleRemoval(of object: SKShapeNode){
+        
+        object.run(SKAction.sequence([
+            SKAction.wait(forDuration: duration),
+            SKAction.scale(by: 0.1, duration: ObjectData.fadeOutDuration),
+            SKAction.fadeOut(withDuration: ObjectData.fadeOutDuration),
+            SKAction.run { [weak self] in
+                
+                guard let self = self else { return }
+                
+                //
+                handleMissedObject()
+            },
+            SKAction.removeFromParent()
+        ]))
+        
+    }
+    
+    // remove one  life if no touch on the object has been detected
+    
+    private func handleMissedObject() {
+        self.gameData.lives -= 1
+        
+        // check Game Over
+        
+        if self.gameData.lives <= 0 {
+            self.endGame()
+            
+        } else {
+            
+            // play audio file
+            
+            AudioServicesPlaySystemSound(GameSound.missTouch)
+            
+            chooseRandomObject()
+        }
+    }
+    
+    
     // MARK: Remove old object before drawing new object
     
-    func removeObject() {
+   private func removeObject() {
         
         enumerateChildNodes(withName: "object") { (object, _) in
             object.removeAllActions()
@@ -208,10 +243,9 @@ class GameScene: SKScene {
         if gameIsOver { return }
         
         // update score and check for new duration
-        for node in nodes {
+        for object in nodes {
             
-            if node.name == "object" {
-                
+            if object.name == "object" {
                 
                 // animation after touching
                 
@@ -232,7 +266,6 @@ class GameScene: SKScene {
                     soundId = GameSound.square
                 }
                 
-                
                 // sound after touching
                 
                 let didLevelUp =  checkLevelUp()
@@ -242,11 +275,10 @@ class GameScene: SKScene {
                 AudioServicesPlaySystemSound(
                     didLevelUp ? GameSound.levelUp : soundId)
                 
-                
                 // start particle anmiation based on object type
                 
                 if let particles = SKEmitterNode(fileNamed: particleFileName) {
-                    particles.position = node.position
+                    particles.position = object.position
                     
                     // add particle
                     
@@ -259,16 +291,12 @@ class GameScene: SKScene {
                     particles.run(removeParticle)
                 }
                 
-                
                 // object fade out animation
                 
-                let scaleUp = SKAction.scale(to: 1.5, duration: ObjectData.fadeOutDuration)
-                let fadeOut = SKAction.fadeOut(withDuration: ObjectData.fadeOutDuration)
-                let remove = SKAction.removeFromParent()
-                node.run(SKAction.sequence([scaleUp, fadeOut, remove]))
+                animateFadeOut(of: object)
                 
                 // calls a new object to draw
-                randomObject()
+                chooseRandomObject()
             }
         }
     }
@@ -276,15 +304,14 @@ class GameScene: SKScene {
     
     //MARK: ramdomly choose circle or square for object type
     
-    func randomObject() {
+    private func chooseRandomObject() {
         
         objectType =
         Int.random(in: 1...100) <= ObjectData.randomObjectProbability
         ? ObjectType.square
         : ObjectType.circle
         
-        
-        drawObject(objectType: objectType)
+        drawObject()
     }
     
     //MARK: end of the game
@@ -303,7 +330,7 @@ class GameScene: SKScene {
     
     //MARK: check level up
     
-    func checkLevelUp() -> Bool {
+    private func checkLevelUp() -> Bool {
         
         switch gameData.score {
             
