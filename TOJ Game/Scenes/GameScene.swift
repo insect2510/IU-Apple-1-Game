@@ -88,23 +88,10 @@ class GameScene: SKScene {
     
     func drawObject(objectType: ObjectType) {
         
+        
         // draw circle or square
         
-        let object: SKShapeNode
-        
-        switch objectType {
-            
-        case ObjectType.circle:
-            object = SKShapeNode(circleOfRadius: ObjectData.circleRadius)
-            object.fillColor = .warmwhite
-            
-        case ObjectType.square:
-            object = SKShapeNode(rectOf: CGSize(width: ObjectData.squareSize, height: ObjectData.squareSize),
-                                 cornerRadius: 0)
-            object.fillColor = .gold
-            
-        }
-        
+        let object = createObject(of: objectType)
         
         // add gaming object to the view
         object.position = randomPoint()
@@ -153,6 +140,35 @@ class GameScene: SKScene {
             SKAction.removeFromParent()
         ]))
     }
+    
+    func createObject(
+        
+        of type: ObjectType
+        
+    )  -> SKShapeNode {
+        
+        // draw circle or square
+        
+        let object: SKShapeNode
+        
+        switch objectType {
+            
+        case ObjectType.circle:
+            object = SKShapeNode(circleOfRadius: ObjectData.circleRadius)
+            object.fillColor = .warmwhite
+            
+        case ObjectType.square:
+            object = SKShapeNode(rectOf: CGSize(width: ObjectData.squareSize, height: ObjectData.squareSize),
+                                 cornerRadius: 0)
+            object.fillColor = .gold
+            
+        }
+        
+        object.strokeColor = .clear
+        
+        return object
+    }
+    
     
     // MARK: Remove old object before drawing new object
     
@@ -262,13 +278,11 @@ class GameScene: SKScene {
     
     func randomObject() {
         
-        randomObjectValue = Int.random(in: 1...100)
+        objectType =
+        Int.random(in: 1...100) <= ObjectData.randomObjectProbability
+        ? ObjectType.square
+        : ObjectType.circle
         
-        if randomObjectValue <= ObjectData.randomObjectProbability {
-            objectType = ObjectType.square
-        } else {
-            objectType = ObjectType.circle
-        }
         
         drawObject(objectType: objectType)
     }
