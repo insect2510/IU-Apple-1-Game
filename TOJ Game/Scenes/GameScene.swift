@@ -43,7 +43,8 @@ class GameScene: SKScene {
     // Circle or Rectangle
     
     var randomObjectValue = Int.random(in: 1...100)
-    var objectType = "circle"
+    
+    private var objectType: ObjectType = ObjectType.circle
     
     override func didMove(to view: SKView) {
         
@@ -86,24 +87,27 @@ class GameScene: SKScene {
     
     //MARK:  Draw a circle with random coordinates
     
-    func drawObject(objectType: String) {
+    func drawObject(objectType: ObjectType) {
         
         
         // draw circle or square
         
         let object: SKShapeNode
         
-        if objectType == "circle" {
+        switch objectType {
+            
+            case ObjectType.circle:
             object = SKShapeNode(circleOfRadius: ObjectData.circleRadius)
             object.fillColor = .warmwhite
             object.position = randomPoint()
             
-        } else  {
+        case ObjectType.square:
             object = SKShapeNode(rectOf: CGSize(width: ObjectData.squareSize, height: ObjectData.squareSize),
                                      cornerRadius: 0)
             object.fillColor = .gold
             object.strokeColor = .clear
             object.position = randomPoint()
+            
         }
         
         
@@ -130,7 +134,6 @@ class GameScene: SKScene {
              SKAction.scale(by: 0.1, duration: ObjectData.fadeOut),
              SKAction.fadeOut(withDuration: ObjectData.fadeOut),
     
-             
              SKAction.run { [weak self] in
                  
                  guard let self = self else { return }
@@ -206,17 +209,15 @@ class GameScene: SKScene {
                     
                 // for circle
                    
-                case "circle":
+                case ObjectType.circle:
                     gameData.score += 1
                     particleFileName = ObjectTouchParticle.standard
                     
                 // for square
                     
-                case "square":
+                case ObjectType.square:
                     gameData.score += 10
                     particleFileName = ObjectTouchParticle.bonus
-                    
-                default: break
                     
                 }
                 
@@ -229,15 +230,15 @@ class GameScene: SKScene {
                     
                 // for circle
                    
-                case "circle":
+                case ObjectType.circle:
                     soundId = didLevelUp ? GameSound.levelUp : GameSound.circle
                     
                 // for square
                     
-                case "square":
+                case ObjectType.square:
                     soundId = didLevelUp ? GameSound.levelUp : GameSound.square
                     
-                default: break
+              //  default: break
                     
                 }
                 
@@ -285,9 +286,9 @@ class GameScene: SKScene {
         randomObjectValue = Int.random(in: 1...100)
         
         if randomObjectValue <= ObjectData.randomObjectProbability {
-           objectType = "circle"
+            objectType = ObjectType.circle
         } else {
-            objectType = "square"
+            objectType = ObjectType.square
         }
         
         drawObject(objectType: objectType)

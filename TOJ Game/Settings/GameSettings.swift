@@ -24,18 +24,18 @@ enum GameSound {
     
 }
 
-enum ObjectTouchParticle {
-    
-    static let standard = "ParticleFire"
-    static let bonus: String = "ParticleMagic"
-    
-}
 
 enum GameText {
     
     static let higScore: String = "Congrats, you made it into the TOP5!" // Text for new highscore
     static let fail: String = "Sorry, you didn't make it in the TOP5!" // Text for not a new highscore
     
+}
+
+
+enum ObjectType {
+    case circle
+    case square
 }
 
 enum ObjectData {
@@ -50,5 +50,13 @@ enum ObjectData {
     static let timerInterval: Double = 1.0
     
     static let randomObjectProbability: Int = 90
+    
+}
+
+
+enum ObjectTouchParticle {
+    
+    static let standard = "ParticleFire"
+    static let bonus: String = "ParticleMagic"
     
 }
