@@ -26,7 +26,6 @@ class GameScene: SKScene {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     // gameOverHandller
     
     var gameOverHandler: ((Int, Int) -> Void)?
@@ -39,7 +38,7 @@ class GameScene: SKScene {
     // Timer
     
     var gameTime: Timer?
-
+    
     // Circle or Rectangle
     
     var randomObjectValue = Int.random(in: 1...100)
@@ -83,7 +82,7 @@ class GameScene: SKScene {
             }
         }
     }
-
+    
     
     //MARK:  Draw a circle with random coordinates
     
@@ -96,14 +95,14 @@ class GameScene: SKScene {
         
         switch objectType {
             
-            case ObjectType.circle:
+        case ObjectType.circle:
             object = SKShapeNode(circleOfRadius: ObjectData.circleRadius)
             object.fillColor = .warmwhite
             object.position = randomPoint()
             
         case ObjectType.square:
             object = SKShapeNode(rectOf: CGSize(width: ObjectData.squareSize, height: ObjectData.squareSize),
-                                     cornerRadius: 0)
+                                 cornerRadius: 0)
             object.fillColor = .gold
             object.strokeColor = .clear
             object.position = randomPoint()
@@ -130,49 +129,49 @@ class GameScene: SKScene {
         // set duration for object display and fade out
         
         object.run(SKAction.sequence([
-             SKAction.wait(forDuration: duration),
-             SKAction.scale(by: 0.1, duration: ObjectData.fadeOut),
-             SKAction.fadeOut(withDuration: ObjectData.fadeOut),
-    
-             SKAction.run { [weak self] in
-                 
-                 guard let self = self else { return }
-                 
-                 // remove one  life if no touch on the object has been detected
-                 
-                 self.gameData.lives -= 1
-                 
-                 
-                 // check Game Over
-                 
-                 if self.gameData.lives <= 0 {
-                     self.endGame()
-                     
-                 } else {
-                     
-                     // play audio file
-                     
-                     AudioServicesPlaySystemSound(GameSound.missTouch)
-                     
-                     self.randomObject()
-                 }
-
-             },
-             SKAction.removeFromParent()
-         ]))
+            SKAction.wait(forDuration: duration),
+            SKAction.scale(by: 0.1, duration: ObjectData.fadeOut),
+            SKAction.fadeOut(withDuration: ObjectData.fadeOut),
+            
+            SKAction.run { [weak self] in
+                
+                guard let self = self else { return }
+                
+                // remove one  life if no touch on the object has been detected
+                
+                self.gameData.lives -= 1
+                
+                
+                // check Game Over
+                
+                if self.gameData.lives <= 0 {
+                    self.endGame()
+                    
+                } else {
+                    
+                    // play audio file
+                    
+                    AudioServicesPlaySystemSound(GameSound.missTouch)
+                    
+                    self.randomObject()
+                }
+                
+            },
+            SKAction.removeFromParent()
+        ]))
     }
     
     // MARK: Remove old object before drawing new object
     func removeObject() {
- 
+        
         enumerateChildNodes(withName: "object") { (object, _) in
-        object.removeAllActions()
-
-        let fade = SKAction.fadeOut(withDuration: ObjectData.fadeOut)
-        let remove = SKAction.removeFromParent()
-        object.run(SKAction.sequence([
-            fade,
-            remove]))
+            object.removeAllActions()
+            
+            let fade = SKAction.fadeOut(withDuration: ObjectData.fadeOut)
+            let remove = SKAction.removeFromParent()
+            object.run(SKAction.sequence([
+                fade,
+                remove]))
             
         }
     }
@@ -196,72 +195,60 @@ class GameScene: SKScene {
         var soundId: SystemSoundID = GameSound.circle
         
         if gameIsOver { return }
-    
+        
         // update score and check for new duration
         for node in nodes {
             
             if node.name == "object" {
-
+                
                 
                 // animation after touching
                 
                 switch objectType {
                     
-                // for circle
-                   
+                    // for circle
+                    
                 case ObjectType.circle:
                     gameData.score += 1
                     particleFileName = ObjectTouchParticle.standard
+                    soundId = GameSound.circle
                     
-                // for square
+                    // for square
                     
                 case ObjectType.square:
                     gameData.score += 10
                     particleFileName = ObjectTouchParticle.bonus
+                    soundId = GameSound.square
                     
                 }
                 
                 
                 // sound after touching
                 
-              let didLevelUp =  checkLevelUp()
+                let didLevelUp =  checkLevelUp()
                 
-                switch objectType {
-                    
-                // for circle
-                   
-                case ObjectType.circle:
-                    soundId = didLevelUp ? GameSound.levelUp : GameSound.circle
-                    
-                // for square
-                    
-                case ObjectType.square:
-                    soundId = didLevelUp ? GameSound.levelUp : GameSound.square
-                    
-              //  default: break
-                    
-                }
+                // add audio
+                
+                AudioServicesPlaySystemSound(
+                    didLevelUp ? GameSound.levelUp : soundId)
                 
                 
                 // start particle anmiation based on object type
                 
                 if let particles = SKEmitterNode(fileNamed: particleFileName) {
-                particles.position = node.position
-                
-                // add audio
+                    particles.position = node.position
                     
-                AudioServicesPlaySystemSound(SystemSoundID(soundId))
-                
-                // add particle
                     
-                addChild(particles)
+                    // add particle
                     
-                // wait and remove particle node
+                    addChild(particles)
                     
-                let removeParticle = SKAction.sequence([SKAction.wait(forDuration: 2),
-                                                        SKAction.removeFromParent()])
-                particles.run(removeParticle)
-            }
+                    // wait and remove particle node
+                    
+                    let removeParticle = SKAction.sequence([SKAction.wait(forDuration: 2),
+                                                            SKAction.removeFromParent()])
+                    particles.run(removeParticle)
+                }
                 
                 
                 // object fade out animation
@@ -273,7 +260,7 @@ class GameScene: SKScene {
                 
                 // calls a new object to draw
                 randomObject()
-               
+                
             }
         }
     }
@@ -303,11 +290,11 @@ class GameScene: SKScene {
         gameIsOver = true
         
         gameTime?.invalidate()
-                
+        
         // call remove all objects function
         removeObject()
         gameOverHandler?(gameData.score, gameData.level)
-
+        
     }
     
     
@@ -335,5 +322,5 @@ class GameScene: SKScene {
         default: return false
         }
     }
-
+    
 }
