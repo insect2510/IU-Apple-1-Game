@@ -119,8 +119,8 @@ class GameScene: SKScene {
         
         // Fade in animation
         
-        let fadeIn = SKAction.fadeIn(withDuration: ObjectData.fadeIn)
-        let scaleUp = SKAction.scale(to: 1, duration: ObjectData.fadeIn)
+        let fadeIn = SKAction.fadeIn(withDuration: ObjectData.fadeInDuration)
+        let scaleUp = SKAction.scale(to: 1, duration: ObjectData.fadeInDuration)
         scaleUp.timingMode = .easeOut
         
         object.run(SKAction.group([fadeIn, scaleUp]))
@@ -130,8 +130,8 @@ class GameScene: SKScene {
         
         object.run(SKAction.sequence([
             SKAction.wait(forDuration: duration),
-            SKAction.scale(by: 0.1, duration: ObjectData.fadeOut),
-            SKAction.fadeOut(withDuration: ObjectData.fadeOut),
+            SKAction.scale(by: 0.1, duration: ObjectData.fadeOutDuration),
+            SKAction.fadeOut(withDuration: ObjectData.fadeOutDuration),
             
             SKAction.run { [weak self] in
                 
@@ -162,12 +162,13 @@ class GameScene: SKScene {
     }
     
     // MARK: Remove old object before drawing new object
+    
     func removeObject() {
         
         enumerateChildNodes(withName: "object") { (object, _) in
             object.removeAllActions()
             
-            let fade = SKAction.fadeOut(withDuration: ObjectData.fadeOut)
+            let fade = SKAction.fadeOut(withDuration: ObjectData.fadeOutDuration)
             let remove = SKAction.removeFromParent()
             object.run(SKAction.sequence([
                 fade,
@@ -178,6 +179,7 @@ class GameScene: SKScene {
     
     
     // MARK:  get random values for coordinates
+    
     func randomPoint() -> CGPoint {
         let x = CGFloat.random(in: 50...frame.width - 50)
         let y = CGFloat.random(in: 100...frame.height - 200)
@@ -186,6 +188,7 @@ class GameScene: SKScene {
     
     
     //MARK: Game Play
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
@@ -253,8 +256,8 @@ class GameScene: SKScene {
                 
                 // object fade out animation
                 
-                let scaleUp = SKAction.scale(to: 1.5, duration: ObjectData.fadeOut)
-                let fadeOut = SKAction.fadeOut(withDuration: ObjectData.fadeOut)
+                let scaleUp = SKAction.scale(to: 1.5, duration: ObjectData.fadeOutDuration)
+                let fadeOut = SKAction.fadeOut(withDuration: ObjectData.fadeOutDuration)
                 let remove = SKAction.removeFromParent()
                 node.run(SKAction.sequence([scaleUp, fadeOut, remove]))
                 

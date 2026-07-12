@@ -43,8 +43,8 @@ enum ObjectData {
     static let circleRadius: Double  = 30.0
     static let squareSize: Double = 60.0
     
-    static let fadeIn: Double = 0.10
-    static let fadeOut: Double = 0.05
+    static let fadeInDuration: Double = 0.10
+    static let fadeOutDuration: Double = 0.05
     
     static let startDuration: Double = 4.0
     static let timerInterval: Double = 1.0
