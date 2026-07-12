@@ -14,7 +14,7 @@ struct GameView: View {
     
     @Environment(\.modelContext) private var modelContext
     
-    @State private var sceneID: UUID = UUID()
+   // @State private var sceneID: UUID = UUID()
     @State private var gameIsOver = false
     @State private var isGaming = false
     @State private var finalScore = 0
@@ -276,13 +276,9 @@ struct GameView: View {
     func restartGame() {
         
         isNewHighScore = false
-                
-       let newScene = GameScene(
-            size: self.scene.size,
-            gameData: gameData
-        )
         
-        newScene.scaleMode = .resizeFill
+        let newScene = createScene()
+        
         
         newScene.gameOverHandler = { finalScore, finalLevel in
             
@@ -367,16 +363,48 @@ struct GameView: View {
         
         
         // Reset game data values
-
+        
+        resetGameData()
+        
+        startGame(with: newScene)
+        
+    }
+    
+    
+    // Reset game data values
+    
+    func resetGameData() {
         gameData.score = 0
         gameData.lives = 3
         gameData.timeRemaining = 60
         gameData.level = 1
+
+    }
+    
+    // start the game
+    
+    func startGame(with scene: GameScene) {
         
-        scene = newScene
+        self.scene = scene
         
         gameIsOver = false
         isGaming = true
+        
+    }
+    
+    // create a new game scene
+    
+    func createScene() -> GameScene {
+        
+       let scene = GameScene(
+        size: self.scene.size,
+        gameData: gameData
+       )
+        
+        scene.scaleMode = .resizeFill
+        
+        return scene
+        
     }
     
     
