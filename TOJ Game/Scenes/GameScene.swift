@@ -88,7 +88,6 @@ class GameScene: SKScene {
     
     func drawObject(objectType: ObjectType) {
         
-        
         // draw circle or square
         
         let object: SKShapeNode
@@ -98,20 +97,17 @@ class GameScene: SKScene {
         case ObjectType.circle:
             object = SKShapeNode(circleOfRadius: ObjectData.circleRadius)
             object.fillColor = .warmwhite
-            object.position = randomPoint()
             
         case ObjectType.square:
             object = SKShapeNode(rectOf: CGSize(width: ObjectData.squareSize, height: ObjectData.squareSize),
                                  cornerRadius: 0)
             object.fillColor = .gold
-            object.strokeColor = .clear
-            object.position = randomPoint()
             
         }
         
         
         // add gaming object to the view
-        
+        object.position = randomPoint()
         object.name = "object"
         object.alpha = 0
         object.setScale(0.1)
@@ -122,7 +118,6 @@ class GameScene: SKScene {
         let fadeIn = SKAction.fadeIn(withDuration: ObjectData.fadeInDuration)
         let scaleUp = SKAction.scale(to: 1, duration: ObjectData.fadeInDuration)
         scaleUp.timingMode = .easeOut
-        
         object.run(SKAction.group([fadeIn, scaleUp]))
         
         
@@ -132,7 +127,6 @@ class GameScene: SKScene {
             SKAction.wait(forDuration: duration),
             SKAction.scale(by: 0.1, duration: ObjectData.fadeOutDuration),
             SKAction.fadeOut(withDuration: ObjectData.fadeOutDuration),
-            
             SKAction.run { [weak self] in
                 
                 guard let self = self else { return }
@@ -155,7 +149,6 @@ class GameScene: SKScene {
                     
                     self.randomObject()
                 }
-                
             },
             SKAction.removeFromParent()
         ]))
@@ -173,7 +166,6 @@ class GameScene: SKScene {
             object.run(SKAction.sequence([
                 fade,
                 remove]))
-            
         }
     }
     
@@ -212,17 +204,16 @@ class GameScene: SKScene {
                     // for circle
                     
                 case ObjectType.circle:
-                    gameData.score += 1
+                    gameData.score += ObjectData.circleScore
                     particleFileName = ObjectTouchParticle.standard
                     soundId = GameSound.circle
                     
                     // for square
                     
                 case ObjectType.square:
-                    gameData.score += 10
+                    gameData.score += ObjectData.squareScore
                     particleFileName = ObjectTouchParticle.bonus
                     soundId = GameSound.square
-                    
                 }
                 
                 
@@ -240,7 +231,6 @@ class GameScene: SKScene {
                 
                 if let particles = SKEmitterNode(fileNamed: particleFileName) {
                     particles.position = node.position
-                    
                     
                     // add particle
                     
@@ -263,7 +253,6 @@ class GameScene: SKScene {
                 
                 // calls a new object to draw
                 randomObject()
-                
             }
         }
     }
@@ -276,15 +265,13 @@ class GameScene: SKScene {
         randomObjectValue = Int.random(in: 1...100)
         
         if randomObjectValue <= ObjectData.randomObjectProbability {
-            objectType = ObjectType.circle
-        } else {
             objectType = ObjectType.square
+        } else {
+            objectType = ObjectType.circle
         }
         
         drawObject(objectType: objectType)
-        
     }
-    
     
     //MARK: end of the game
     
@@ -297,7 +284,6 @@ class GameScene: SKScene {
         // call remove all objects function
         removeObject()
         gameOverHandler?(gameData.score, gameData.level)
-        
     }
     
     
@@ -325,5 +311,4 @@ class GameScene: SKScene {
         default: return false
         }
     }
-    
 }
