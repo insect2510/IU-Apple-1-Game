@@ -10,7 +10,6 @@ import SpriteKit
 import AudioToolbox
 import SwiftUI
 
-
 class GameScene: SKScene {
     
     // MARK: Setup
@@ -57,7 +56,6 @@ class GameScene: SKScene {
         drawObject()
     }
     
-    
     // Start Timer
     
     private func startTimer() {
@@ -72,13 +70,13 @@ class GameScene: SKScene {
             
             guard let self else { return }
             
-            if self.gameIsOver {
+            if gameIsOver {
                 timer.invalidate()
                 return
             }
-            self.gameData.timeRemaining -= 1
-            if self.gameData.timeRemaining == 0 {
-                self.endGame()
+            gameData.timeRemaining -= 1
+            if gameData.timeRemaining == 0 {
+                endGame()
             }
         }
     }
@@ -87,6 +85,8 @@ class GameScene: SKScene {
     //MARK:  Draw a circle with random coordinates
     
     private func drawObject() {
+        
+        objectType = randomObjectType()
         
         // draw circle or square
         
@@ -192,7 +192,7 @@ class GameScene: SKScene {
         // check Game Over
         
         if self.gameData.lives <= 0 {
-            self.endGame()
+            endGame()
             
         } else {
             
@@ -200,7 +200,7 @@ class GameScene: SKScene {
             
             AudioServicesPlaySystemSound(GameSound.missTouch)
             
-            chooseRandomObject()
+            drawObject()
         }
     }
     
@@ -296,7 +296,8 @@ class GameScene: SKScene {
                 animateFadeOut(of: object)
                 
                 // calls a new object to draw
-                chooseRandomObject()
+                
+                drawObject()
             }
         }
     }
@@ -304,19 +305,17 @@ class GameScene: SKScene {
     
     //MARK: ramdomly choose circle or square for object type
     
-    private func chooseRandomObject() {
+    private func randomObjectType() -> ObjectType {
         
-        objectType =
         Int.random(in: 1...100) <= ObjectData.randomObjectProbability
         ? ObjectType.square
         : ObjectType.circle
         
-        drawObject()
     }
     
     //MARK: end of the game
     
-    func endGame() {
+   private func endGame() {
         
         gameIsOver = true
         
