@@ -93,25 +93,25 @@ struct GameOverView: View {
                         
                         
                         if isNewHighScore {
-                            Text(GameText.higScore)
+                            Text(Highscore.Top5.text)
                                 .font(.title2)
                                 .fontWeight(.light)
                                 .foregroundColor(Colors.primarycolor)
                                 .onAppear {
                                     
-                                    AudioServicesPlaySystemSound(SystemSoundID(GameSound.highScore))
+                                    AudioServicesPlaySystemSound(SystemSoundID(Highscore.Top5.sound))
                                 }
                             
                             
                         } else {
                             
-                            Text(GameText.fail)
+                            Text(Highscore.Missed.text)
                                 .font(.title2)
                                 .fontWeight(.light)
                                 .foregroundColor(Colors.primarycolor)
                                 .onAppear {
                                     
-                                    AudioServicesPlaySystemSound(SystemSoundID(GameSound.fail))
+                                    AudioServicesPlaySystemSound(SystemSoundID(Highscore.Missed.sound))
                                 }
                     
                         }

@@ -31,7 +31,7 @@ class GameScene: SKScene {
     
     // Duratian at the start of the game in seconds
     
-   private var duration = ObjectData.startDuration
+   private var duration = ObjectAnimation.startDuration
    private var gameIsOver = false
     
     // Timer
@@ -64,7 +64,7 @@ class GameScene: SKScene {
         gameTime?.invalidate()
         
         gameTime = Timer.scheduledTimer(
-            withTimeInterval: ObjectData.timerInterval,
+            withTimeInterval: ObjectAnimation.timerInterval,
             repeats: true
         )
         { [weak self] timer in
@@ -120,18 +120,17 @@ class GameScene: SKScene {
         switch type {
             
         case .circle:
-            object = SKShapeNode(circleOfRadius: ObjectData.circleRadius)
-            object.fillColor = Colors.circlecolor
+            object = SKShapeNode(circleOfRadius: GamingObject.Circle.size)
+            object.fillColor = GamingObject.Circle.fillcolor
             
         case .square:
             object = SKShapeNode(
-                rectOf: CGSize(width: ObjectData.squareSize,
-                               height: ObjectData.squareSize)
+                rectOf: CGSize(width: GamingObject.Square.size,
+                               height: GamingObject.Square.size)
             )
             object.fillColor = Colors.squarecolor
             object.zRotation = .pi / 4 // Rotation 45 Grad
         }
-        
         object.strokeColor = .clear
         
         return object
@@ -153,8 +152,8 @@ class GameScene: SKScene {
     
    private func animateAppearance(of object: SKShapeNode) {
         
-        let fadeIn = SKAction.fadeIn(withDuration: ObjectData.fadeInDuration)
-        let scaleUp = SKAction.scale(to: 1, duration: ObjectData.fadeInDuration)
+        let fadeIn = SKAction.fadeIn(withDuration: ObjectAnimation.fadeInDuration)
+        let scaleUp = SKAction.scale(to: 1, duration: ObjectAnimation.fadeInDuration)
         scaleUp.timingMode = .easeOut
         object.run(SKAction.group([fadeIn, scaleUp]))
         
@@ -164,8 +163,8 @@ class GameScene: SKScene {
     
    private func animateFadeOut(of object: SKNode) {
         
-        let scaleUp = SKAction.scale(to: 1.5, duration: ObjectData.fadeOutDuration)
-        let fadeOut = SKAction.fadeOut(withDuration: ObjectData.fadeOutDuration)
+        let scaleUp = SKAction.scale(to: 1.5, duration: ObjectAnimation.fadeOutDuration)
+        let fadeOut = SKAction.fadeOut(withDuration: ObjectAnimation.fadeOutDuration)
         let remove = SKAction.removeFromParent()
         object.run(SKAction.sequence([scaleUp, fadeOut, remove]))
     }
@@ -175,8 +174,8 @@ class GameScene: SKScene {
         
         object.run(SKAction.sequence([
             SKAction.wait(forDuration: duration),
-            SKAction.scale(by: 0.1, duration: ObjectData.fadeOutDuration),
-            SKAction.fadeOut(withDuration: ObjectData.fadeOutDuration),
+            SKAction.scale(by: 0.1, duration: ObjectAnimation.fadeOutDuration),
+            SKAction.fadeOut(withDuration: ObjectAnimation.fadeOutDuration),
             SKAction.run { [weak self] in
                 
                 guard let self = self else { return }
@@ -217,7 +216,7 @@ class GameScene: SKScene {
         enumerateChildNodes(withName: "object") { (object, _) in
             object.removeAllActions()
             
-            let fade = SKAction.fadeOut(withDuration: ObjectData.fadeOutDuration)
+            let fade = SKAction.fadeOut(withDuration: ObjectAnimation.fadeOutDuration)
             let remove = SKAction.removeFromParent()
             object.run(SKAction.sequence([
                 fade,
@@ -242,8 +241,8 @@ class GameScene: SKScene {
         let location = touch.location(in: self)
         let nodes = nodes(at: location)
         
-        var particleFileName = ObjectTouchParticle.circle
-        var soundId: SystemSoundID = GameSound.circle
+        var particleFileName = GamingObject.Circle.particle
+        var soundId: SystemSoundID = GamingObject.Circle.sound
         
         if gameIsOver { return }
         
@@ -259,16 +258,16 @@ class GameScene: SKScene {
                 // for circle
                     
                 case ObjectType.circle:
-                    gameData.score += ObjectData.circleScore
-                    particleFileName = ObjectTouchParticle.circle
-                    soundId = GameSound.circle
+                    gameData.score += GamingObject.Circle.score
+                    particleFileName = GamingObject.Circle.particle
+                    soundId = GamingObject.Circle.sound
                     
                 // for square
                     
                 case ObjectType.square:
-                    gameData.score += ObjectData.squareScore
-                    particleFileName = ObjectTouchParticle.square
-                    soundId = GameSound.square
+                    gameData.score += GamingObject.Square.score
+                    particleFileName = GamingObject.Square.particle
+                    soundId = GamingObject.Square.sound
                 }
                 
                 // sound after touching
@@ -312,7 +311,7 @@ class GameScene: SKScene {
     
     private func randomObjectType() -> ObjectType {
         
-        Int.random(in: 1...100) <= ObjectData.randomObjectProbability
+        Int.random(in: 1...100) <= GamingObject.randomObjectProbability
         ? ObjectType.square
         : ObjectType.circle
         
