@@ -12,9 +12,9 @@ import AudioToolbox
 
 struct GameOverView: View {
     
-    @Query(sort: \Highscore.points, order: .reverse)
+    @Query(sort: \Score.points, order: .reverse)
     
-    private var highScore: [Highscore]
+    private var highScore: [Score]
     
     //  @Environment(\.modelContext) var modelContext
     
@@ -32,7 +32,7 @@ struct GameOverView: View {
             let isLandscape = geometry.size.height < geometry.size.width
             
             ZStack {
-                Color.darknight
+                Color(Colors.backgroundcolor)
                     .ignoresSafeArea()
                 
                 ScrollView {
@@ -50,7 +50,7 @@ struct GameOverView: View {
                         
                             .scaleEffect(1.5)
                             .tracking(5)
-                            .foregroundColor(.warmwhite)
+                            .foregroundColor(Colors.primarycolor)
                             .textCase(.uppercase)
                         
                         HStack {
@@ -59,12 +59,12 @@ struct GameOverView: View {
                                 Text( "score:")
                                     .font(.title3)
                                     .fontWeight(.medium)
-                                    .foregroundColor(.warmwhite.opacity(0.8))
+                                    .foregroundColor(Colors.primarycolor.opacity(0.8))
                                 
                                 Text("\(score)")
                                     .font(.title3)
                                     .fontWeight(.bold)
-                                    .foregroundColor(.warmwhite)
+                                    .foregroundColor(Colors.primarycolor)
                             }
                             
                             // Spacer
@@ -77,13 +77,15 @@ struct GameOverView: View {
                                 Text( "level:")
                                     .font(.title3)
                                     .fontWeight(.medium)
-                                    .foregroundColor(.warmwhite.opacity(0.8))
+                                    .foregroundColor(Colors.primarycolor.opacity(0.8))
                                 
                                 Text("\(level)")
                                     .font(.title3)
                                     .fontWeight(.bold)
-                                    .foregroundColor(.warmwhite)
+                                    .foregroundColor(Colors.primarycolor)
                             }
+                            
+                           
                         }
                         
                         .padding()
@@ -94,23 +96,24 @@ struct GameOverView: View {
                             Text(GameText.higScore)
                                 .font(.title2)
                                 .fontWeight(.light)
-                                .foregroundColor(.warmwhite)
+                                .foregroundColor(Colors.primarycolor)
                                 .onAppear {
                                     
                                     AudioServicesPlaySystemSound(SystemSoundID(GameSound.highScore))
                                 }
+                            
                             
                         } else {
                             
                             Text(GameText.fail)
                                 .font(.title2)
                                 .fontWeight(.light)
-                                .foregroundColor(.warmwhite)
+                                .foregroundColor(Colors.primarycolor)
                                 .onAppear {
                                     
                                     AudioServicesPlaySystemSound(SystemSoundID(GameSound.fail))
                                 }
-                            
+                    
                         }
                         
                         
@@ -149,7 +152,7 @@ struct GameOverView: View {
                                 
                             }
                             .font(.headline)
-                            .foregroundColor(.lightnight)
+                            .foregroundColor(Colors.backgroundcolor.opacity(0.8))
                             
                             Divider()
                             
@@ -192,7 +195,7 @@ struct GameOverView: View {
                                         
                                     }
                                     .font(.system(size: 18))
-                                    .foregroundColor(.black)
+                                    .foregroundColor(Colors.backgroundcolor)
                                     .padding(.vertical,  isLandscape ? 4 : 8)
                                     
                                     if index < 4 {
@@ -208,12 +211,13 @@ struct GameOverView: View {
                             RoundedRectangle(
                                 cornerRadius: 24
                             )
-                            .fill(.warmwhite)
+                            .fill(Colors.primarycolor)
                         )
                         .padding(.horizontal, 24)
                         
                         
                         //MARK: Restart Button
+                        
                         Button {
                             restartAction()
                             
@@ -227,9 +231,9 @@ struct GameOverView: View {
                                 .padding(.vertical, 18)
                                 .background(
                                     Capsule()
-                                        .fill(.darkcyan)
+                                        .fill(Colors.buttonbackground)
                                 )
-                                .foregroundColor(.warmwhite)
+                                .foregroundColor(Colors.backgroundcolor)
                         }
                         
                     }

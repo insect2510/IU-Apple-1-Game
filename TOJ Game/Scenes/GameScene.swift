@@ -14,7 +14,7 @@ class GameScene: SKScene {
     
     // MARK: Setup
     
-    var gameData: GameData
+    private var gameData: GameData
     
     init(size: CGSize, gameData: GameData) {
         self.gameData = gameData
@@ -31,18 +31,18 @@ class GameScene: SKScene {
     
     // Duratian at the start of the game in seconds
     
-    var duration = ObjectData.startDuration
-    var gameIsOver = false
+   private var duration = ObjectData.startDuration
+   private var gameIsOver = false
     
     // Timer
     
-    var gameTime: Timer?
+    private var gameTime: Timer?
     
-    // Circle or Rectangle
+    // init object selection - always start with a circle
     
-    var randomObjectValue = Int.random(in: 1...100)
-    
+    private var randomObjectValue = 1
     private var objectType: ObjectType = ObjectType.circle
+    
     
     override func didMove(to view: SKView) {
         
@@ -53,7 +53,8 @@ class GameScene: SKScene {
         // Timer Setup
         
         startTimer()
-        drawObject()
+        
+        spawnObject()
     }
     
     // Start Timer
@@ -82,9 +83,11 @@ class GameScene: SKScene {
     }
     
     
-    //MARK:  Draw a circle with random coordinates
+    //MARK:  spawn object with random coordinates
     
-    private func drawObject() {
+    private func spawnObject() {
+        
+        // random select object type
         
         objectType = randomObjectType()
         
@@ -98,13 +101,13 @@ class GameScene: SKScene {
         
         animateAppearance(of: object)
         
-        // set duration for object display and fade out
+        // set duration for object display and fade out + delete
         
         scheduleRemoval(of: object)
     }
     
     
-    // draw circle or square
+    // draw object
     
    private func createObject(
         
@@ -118,13 +121,15 @@ class GameScene: SKScene {
             
         case .circle:
             object = SKShapeNode(circleOfRadius: ObjectData.circleRadius)
-            object.fillColor = .warmwhite
+            object.fillColor = Colors.circlecolor
             
         case .square:
-            object = SKShapeNode(rectOf: CGSize(width: ObjectData.squareSize, height: ObjectData.squareSize),
-                                 cornerRadius: 0)
-            object.fillColor = .gold
-            
+            object = SKShapeNode(
+                rectOf: CGSize(width: ObjectData.squareSize,
+                               height: ObjectData.squareSize)
+            )
+            object.fillColor = Colors.squarecolor
+            object.zRotation = .pi / 4 // Rotation 45 Grad
         }
         
         object.strokeColor = .clear
@@ -200,7 +205,7 @@ class GameScene: SKScene {
             
             AudioServicesPlaySystemSound(GameSound.missTouch)
             
-            drawObject()
+            spawnObject()
         }
     }
     
@@ -237,7 +242,7 @@ class GameScene: SKScene {
         let location = touch.location(in: self)
         let nodes = nodes(at: location)
         
-        var particleFileName = ObjectTouchParticle.standard
+        var particleFileName = ObjectTouchParticle.circle
         var soundId: SystemSoundID = GameSound.circle
         
         if gameIsOver { return }
@@ -251,18 +256,18 @@ class GameScene: SKScene {
                 
                 switch objectType {
                     
-                    // for circle
+                // for circle
                     
                 case ObjectType.circle:
                     gameData.score += ObjectData.circleScore
-                    particleFileName = ObjectTouchParticle.standard
+                    particleFileName = ObjectTouchParticle.circle
                     soundId = GameSound.circle
                     
-                    // for square
+                // for square
                     
                 case ObjectType.square:
                     gameData.score += ObjectData.squareScore
-                    particleFileName = ObjectTouchParticle.bonus
+                    particleFileName = ObjectTouchParticle.square
                     soundId = GameSound.square
                 }
                 
@@ -297,7 +302,7 @@ class GameScene: SKScene {
                 
                 // calls a new object to draw
                 
-                drawObject()
+                spawnObject()
             }
         }
     }

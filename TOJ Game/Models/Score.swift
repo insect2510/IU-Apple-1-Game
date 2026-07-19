@@ -1,5 +1,5 @@
 //
-//  Highscore.swift
+//  Score.swift
 //  TOJ Game
 //
 //  Created by Oliver Hartmann on 28.06.26.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Highscore {
+class Score {
     
     var name: String = ""
     var points: Int = 0

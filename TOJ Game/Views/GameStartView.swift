@@ -32,12 +32,12 @@ struct GameStartView: View {
                     
                     Text("TOJ")
                         .font(.system(.largeTitle, weight: .black))
-                        .foregroundColor(.warmwhite)
+                        .foregroundColor(Colors.primarycolor)
                         .scaleEffect(1.5)
 
                     Text("Touch the object")
                         .font(.system(.title, weight: .medium))
-                        .foregroundColor(.warmwhite)
+                        .foregroundColor(Colors.primarycolor)
                     
                     
                     // show start button
@@ -55,9 +55,9 @@ struct GameStartView: View {
                         .padding(.vertical, 18)
                         .background(
                             Capsule()
-                                .fill(.darkcyan)
+                                .fill(.limegreen)
                             )
-                        .foregroundColor(.warmwhite)
+                        .foregroundColor(Colors.backgroundcolor)
                         
                     }
                 }

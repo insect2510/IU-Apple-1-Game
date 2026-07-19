@@ -25,8 +25,8 @@ struct GameView: View {
     
     @State private var isNewHighScore = false
     
-    @Query(sort: \Highscore.points, order: .reverse)
-    private var highScore: [Highscore]
+    @Query(sort: \Score.points, order: .reverse)
+    private var highScore: [Score]
     
     @State private var randomPosition: [CGPoint] = []
     @State private var animatedBackground = false
@@ -61,7 +61,7 @@ struct GameView: View {
             
             ZStack {
                 
-                Color.darknight
+                Color(Colors.backgroundcolor)
                     .ignoresSafeArea()
                 
                 //MARK: random squares in the background
@@ -73,7 +73,7 @@ struct GameView: View {
                 ) { index in
                     
                     Rectangle()
-                        .fill(.gold.opacity(0.2))
+                        .fill(Colors.primarycolor.opacity(0.1))
                         .frame(width: 60, height: 60)
                     
                     // .position(randomPosition[index]
@@ -197,12 +197,12 @@ struct GameView: View {
                             )
                         )
                         .tracking(6)
-                        .foregroundColor(.warmwhite)
+                        .foregroundColor(Colors.primarycolor )
                         .padding(.horizontal, 40)
                         .padding(.vertical, 20)
                         .background(
                             Capsule()
-                                .fill(.darkred)
+                                .fill(Colors.levelupbackground)
                         )
                     
                         .scaleEffect(showLevelUp ? 1.2 : 0.5)
@@ -363,7 +363,6 @@ struct GameView: View {
         
         let topScores = highScore.prefix(5)
         
-        
         // check for qualifing
         
         let qualifies =
@@ -373,7 +372,6 @@ struct GameView: View {
         if !qualifies {
             return false
         }
-        
         
         // delete old rank 5 before inserting
         
@@ -391,7 +389,7 @@ struct GameView: View {
         
         // create data for new highscore
         
-        let newScore = Highscore(
+        let newScore = Score(
             name: "Oliver",
             points: score,
             level: level
@@ -418,7 +416,7 @@ struct GameView: View {
             
             // reload data model and print values to console while testing
             
-            let descriptor = FetchDescriptor<Highscore>()
+            let descriptor = FetchDescriptor<Score>()
             let result = try modelContext.fetch(descriptor)
             
             print("Direkt gefunden:", result.count)

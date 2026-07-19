@@ -7,6 +7,7 @@
 
 import Foundation
 import AudioToolbox
+import SwiftUI
 
 // sound ids
 
@@ -28,7 +29,6 @@ enum GameSound {
 enum GameText {
     static let higScore: String = "Congrats, you made it into the TOP5!"    // Text for new highscore
     static let fail: String = "Sorry, you didn't make it in the TOP5!"      // Text for not a new highscore
-    
 }
 
 // types of gaming objects
@@ -46,21 +46,26 @@ enum ObjectData {
     static let circleScore: Int = 1
     static let squareSize: Double = 60.0        // size for square
     static let squareScore: Int = 10
-    
     static let fadeInDuration: Double = 0.10    // duration for fade in animation
     static let fadeOutDuration: Double = 0.05   // duration for fade out animation
-    
     static let startDuration: Double = 4.0      // start duration to wait for a new object to draw
     static let timerInterval: Double = 1.0      // duration for game time = 1 second
-    
     static let randomObjectProbability: Int = 10    // probabilty for a bonus object in procent
-    
 }
 
 // properties for particle overlays
 
 enum ObjectTouchParticle {
-    static let standard: String = "ParticleFire"        // filename for particle overlay for a circle object
-    static let bonus: String = "ParticleMagic"          // filename for particle overlay for a square object
+    static let circle: String = "ParticleFire"        // filename for particle overlay for a circle object
+    static let square: String = "ParticleMagic"      // filename for particle overlay for a square object
     
+}
+
+enum Colors {
+    static let circlecolor: UIColor = .brightgold
+    static let squarecolor: UIColor = .brightcyan
+    static let buttonbackground: Color = .limegreen
+    static let levelupbackground: Color = .darkpink
+    static let primarycolor: Color = .warmwhite
+    static let backgroundcolor: Color = .darknight
 }

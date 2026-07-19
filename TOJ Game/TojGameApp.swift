@@ -17,7 +17,7 @@ struct TojGame: App {
             
             GameView()
         }
-                .modelContainer(for: Highscore.self)
+                .modelContainer(for: Score.self)
        
     }
 }
