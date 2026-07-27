@@ -72,11 +72,13 @@ struct GameView: View {
                     
                 ) { index in
                     
+                    // draw rectangle
+                    
                     Rectangle()
                         .fill(Colors.primarycolor.opacity(0.1))
                         .frame(width: 60, height: 60)
                     
-                    // .position(randomPosition[index]
+                    // random start position per rectancle
                     
                         .position(
                             CGPoint(
