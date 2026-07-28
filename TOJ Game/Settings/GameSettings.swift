@@ -14,7 +14,7 @@ import SpriteKit
 
 enum GameSound {
     
-    static let circle: SystemSoundID = 1052     // normal touch
+    static let coin: SystemSoundID = 1052     // normal touch
     static let diamont: SystemSoundID = 1007     // bonus touch
     
     static let levelUp: SystemSoundID = 1016    // level up information
@@ -33,14 +33,14 @@ enum ObjectAnimation {
     
     static let fadeInDuration: Double = 0.10    // duration for fade in animation
     static let fadeOutDuration: Double = 0.05   // duration for fade out animation
-    static let startDuration: Double = 4.0      // start duration to wait for a new object to draw
+    static let startDuration: Double = 5.0      // start duration to wait for a new object to draw
     static let timerInterval: Double = 1.0      // duration for game time = 1 second
 }
 
 // color settings
 
 enum Colors {
-    static let circleColor: UIColor = .brightgold
+    static let coinColor: UIColor = .brightgold
     static let diamondColor: UIColor = .brightcyan
     static let buttonbackground: Color = .limegreen
     static let levelupbackground: Color = .darkpink
@@ -67,7 +67,7 @@ enum Highscore {
 // types of gaming objects
 
 enum ObjectType {
-    case circle
+    case coin
     case diamond
 }
 
@@ -75,11 +75,11 @@ enum ObjectType {
 
 enum GamingObject {
     
-    enum Circle {
-        static let fillcolor = Colors.circleColor       // color for circle
+    enum Coin {
+        static let fillcolor = Colors.coinColor       // color for circle
         static let size: Double  = 30.0                 // size for circle
         static let score: Int = 1                       // score for circle
-        static let sound = GameSound.circle             // sound for circle
+        static let sound = GameSound.coin             // sound for circle
         static let particle: String = "ParticleFire"    // filename for particle overlay for a circle
     }
     

@@ -31,8 +31,8 @@ class GameScene: SKScene {
     
     // Duratian at the start of the game in seconds
     
-   private var duration = ObjectAnimation.startDuration
-   private var gameIsOver = false
+    private var duration = ObjectAnimation.startDuration
+    private var gameIsOver = false
     
     // Timer
     
@@ -41,7 +41,7 @@ class GameScene: SKScene {
     // init object selection - always start with a circle
     
     private var randomObjectValue = 1
-    private var objectType: ObjectType = ObjectType.circle
+    private var objectType: ObjectType = ObjectType.coin
     
     
     override func didMove(to view: SKView) {
@@ -91,7 +91,7 @@ class GameScene: SKScene {
         
         objectType = randomObjectType()
         
-        // draw circle or square
+        // draw coin or daimond
         
         let object = createObject(of: objectType)
         
@@ -109,7 +109,7 @@ class GameScene: SKScene {
     
     // draw object
     
-   private func createObject(
+    private func createObject(
         
         of type: ObjectType
         
@@ -119,9 +119,9 @@ class GameScene: SKScene {
         
         switch type {
             
-        case .circle:
-            object = SKShapeNode(circleOfRadius: GamingObject.Circle.size)
-            object.fillColor = GamingObject.Circle.fillcolor
+        case .coin:
+            object = SKShapeNode(circleOfRadius: GamingObject.Coin.size)
+            object.fillColor = GamingObject.Coin.fillcolor
             
         case .diamond:
             object = SKShapeNode(
@@ -139,7 +139,7 @@ class GameScene: SKScene {
     
     // add gaming object to the view
     
-   private func configureObject(_ object: SKShapeNode) {
+    private func configureObject(_ object: SKShapeNode) {
         
         object.position = randomPoint()
         object.name = "object"
@@ -150,7 +150,7 @@ class GameScene: SKScene {
     
     // fade in animation
     
-   private func animateAppearance(of object: SKShapeNode) {
+    private func animateAppearance(of object: SKShapeNode) {
         
         let fadeIn = SKAction.fadeIn(withDuration: ObjectAnimation.fadeInDuration)
         let scaleUp = SKAction.scale(to: 1, duration: ObjectAnimation.fadeInDuration)
@@ -161,7 +161,7 @@ class GameScene: SKScene {
     
     // fade out animation
     
-   private func animateFadeOut(of object: SKNode) {
+    private func animateFadeOut(of object: SKNode) {
         
         let scaleUp = SKAction.scale(to: 1.5, duration: ObjectAnimation.fadeOutDuration)
         let fadeOut = SKAction.fadeOut(withDuration: ObjectAnimation.fadeOutDuration)
@@ -170,7 +170,7 @@ class GameScene: SKScene {
     }
     
     
-   private func scheduleRemoval(of object: SKShapeNode){
+    private func scheduleRemoval(of object: SKShapeNode){
         
         object.run(SKAction.sequence([
             SKAction.wait(forDuration: duration),
@@ -211,7 +211,7 @@ class GameScene: SKScene {
     
     // MARK: Remove old object before drawing new object
     
-   private func removeObject() {
+    private func removeObject() {
         
         enumerateChildNodes(withName: "object") { (object, _) in
             object.removeAllActions()
@@ -241,8 +241,8 @@ class GameScene: SKScene {
         let location = touch.location(in: self)
         let nodes = nodes(at: location)
         
-        var particleFileName = GamingObject.Circle.particle
-        var soundId: SystemSoundID = GamingObject.Circle.sound
+        var particleFileName = GamingObject.Coin.particle
+        var soundId: SystemSoundID = GamingObject.Coin.sound
         
         if gameIsOver { return }
         
@@ -255,14 +255,14 @@ class GameScene: SKScene {
                 
                 switch objectType {
                     
-                // for circle
+                    // for coin
                     
-                case ObjectType.circle:
-                    gameData.score += GamingObject.Circle.score
-                    particleFileName = GamingObject.Circle.particle
-                    soundId = GamingObject.Circle.sound
+                case ObjectType.coin:
+                    gameData.score += GamingObject.Coin.score
+                    particleFileName = GamingObject.Coin.particle
+                    soundId = GamingObject.Coin.sound
                     
-                // for square
+                    // for diamond
                     
                 case ObjectType.diamond:
                     gameData.score += GamingObject.Diamond.score
@@ -313,19 +313,20 @@ class GameScene: SKScene {
         
         Int.random(in: 1...100) <= GamingObject.randomObjectProbability
         ? ObjectType.diamond
-        : ObjectType.circle
+        : ObjectType.coin
         
     }
     
     //MARK: end of the game
     
-   private func endGame() {
+    private func endGame() {
         
         gameIsOver = true
         
         gameTime?.invalidate()
         
         // call remove all objects function
+        
         removeObject()
         gameOverHandler?(gameData.score, gameData.level)
     }
@@ -337,18 +338,23 @@ class GameScene: SKScene {
         
         switch gameData.score {
             
-        case 80... where gameData.level < 4:
+        case 100... where gameData.level < 5:
             duration = 1.0
+            gameData.level = 5
+            return true
+            
+        case 75... where gameData.level < 4:
+            duration = 2.0
             gameData.level = 4
             return true
             
         case 50... where gameData.level < 3:
-            duration = 2.0
+            duration = 3.0
             gameData.level = 3
             return true
             
-        case 20... where gameData.level < 2:
-            duration = 3.0
+        case 25... where gameData.level < 2:
+            duration = 4.0
             gameData.level = 2
             return true
             
