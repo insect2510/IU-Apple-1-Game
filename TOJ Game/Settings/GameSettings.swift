@@ -54,12 +54,12 @@ enum Colors {
 enum Highscore {
     
     enum Top5 {
-        static let text: String = "Congrats, you made it into the TOP5!"    // Text for new highscore
+        static let text: String = "Congrats, you made it into the Top 5!"    // Text for new highscore
         static let sound = GameSound.top5Entry                                   // sound new highscore
     }
     
     enum Missed {
-        static let text: String = "Sorry, you didn't make it in the TOP5!"    // Text top5 missed
+        static let text: String = "Sorry, you didn't make it in the Top 5!"    // Text top5 missed
         static let sound = GameSound.top5Missed                               //sound top5 missed
     }
 }

@@ -56,7 +56,7 @@ struct GameOverView: View {
                         HStack {
                             
                             VStack (spacing: 6) {
-                                Text( "score:")
+                                Text( "score")
                                     .font(.title3)
                                     .fontWeight(.medium)
                                     .foregroundColor(Colors.primarycolor.opacity(0.8))
@@ -74,7 +74,7 @@ struct GameOverView: View {
                                 .frame(width: 1, height: 50)
                             
                             VStack (spacing: 6) {
-                                Text( "level:")
+                                Text( "level")
                                     .font(.title3)
                                     .fontWeight(.medium)
                                     .foregroundColor(Colors.primarycolor.opacity(0.8))
