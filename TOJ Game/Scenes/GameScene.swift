@@ -123,12 +123,12 @@ class GameScene: SKScene {
             object = SKShapeNode(circleOfRadius: GamingObject.Circle.size)
             object.fillColor = GamingObject.Circle.fillcolor
             
-        case .square:
+        case .diamond:
             object = SKShapeNode(
-                rectOf: CGSize(width: GamingObject.Square.size,
-                               height: GamingObject.Square.size)
+                rectOf: CGSize(width: GamingObject.Diamond.size,
+                               height: GamingObject.Diamond.size)
             )
-            object.fillColor = Colors.squarecolor
+            object.fillColor = Colors.diamondColor
             object.zRotation = .pi / 4 // Rotation 45 Grad
         }
         object.strokeColor = .clear
@@ -264,10 +264,10 @@ class GameScene: SKScene {
                     
                 // for square
                     
-                case ObjectType.square:
-                    gameData.score += GamingObject.Square.score
-                    particleFileName = GamingObject.Square.particle
-                    soundId = GamingObject.Square.sound
+                case ObjectType.diamond:
+                    gameData.score += GamingObject.Diamond.score
+                    particleFileName = GamingObject.Diamond.particle
+                    soundId = GamingObject.Diamond.sound
                 }
                 
                 // sound after touching
@@ -312,7 +312,7 @@ class GameScene: SKScene {
     private func randomObjectType() -> ObjectType {
         
         Int.random(in: 1...100) <= GamingObject.randomObjectProbability
-        ? ObjectType.square
+        ? ObjectType.diamond
         : ObjectType.circle
         
     }

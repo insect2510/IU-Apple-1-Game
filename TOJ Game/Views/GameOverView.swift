@@ -91,7 +91,6 @@ struct GameOverView: View {
                         .padding()
                         .textCase(.uppercase)
                         
-                        
                         if isNewHighScore {
                             Text(Highscore.Top5.text)
                                 .font(.title2)
@@ -113,9 +112,7 @@ struct GameOverView: View {
                                     
                                     AudioServicesPlaySystemSound(SystemSoundID(Highscore.Missed.sound))
                                 }
-                    
                         }
-                        
                         
                         // MARK: Highscore Card
                         
@@ -128,7 +125,6 @@ struct GameOverView: View {
                                     ? .system(.title2, weight: .bold)
                                     : .system(.title, weight: .black)
                                 )
-                            
                             
                                 .foregroundColor(.black)
                             
@@ -172,13 +168,11 @@ struct GameOverView: View {
                                                 alignment: .leading
                                             )
                                         
-                                        
                                         Text(entry.name)
                                             .frame(
                                                 maxWidth: .infinity,
                                                 alignment: .leading
                                             )
-                                        
                                         
                                         Text("\(entry.points)")
                                             .frame(

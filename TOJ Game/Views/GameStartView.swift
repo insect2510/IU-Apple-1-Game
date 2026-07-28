@@ -83,7 +83,7 @@ struct GameStartView: View {
                             
                             HStack (spacing: isLandscape ? 8 : 16) {
                                 Rectangle()
-                                    .fill(Color(GamingObject.Square.fillcolor))
+                                    .fill(Color(GamingObject.Diamond.fillcolor))
                                     .frame(width: isLandscape ? 12 : 18,
                                            height: isLandscape ? 12 : 18)
                                     .rotationEffect(Angle(degrees: 45))

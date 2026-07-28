@@ -15,14 +15,14 @@ import SpriteKit
 enum GameSound {
     
     static let circle: SystemSoundID = 1052     // normal touch
-    static let square: SystemSoundID = 1007     // bonus touch
+    static let diamont: SystemSoundID = 1007     // bonus touch
     
     static let levelUp: SystemSoundID = 1016    // level up information
     
     static let missTouch: SystemSoundID = 1000  // touch missed
     
-    static let top5Missed: SystemSoundID = 1021       // game over
-    static let top5: SystemSoundID = 1025  // game over new highscore
+    static let top5Missed: SystemSoundID = 1021 // game over top5 missed
+    static let top5Entry: SystemSoundID = 1025  // game over top5 new entry
     
 }
 
@@ -40,8 +40,8 @@ enum ObjectAnimation {
 // color settings
 
 enum Colors {
-    static let circlecolor: UIColor = .brightgold
-    static let squarecolor: UIColor = .brightcyan
+    static let circleColor: UIColor = .brightgold
+    static let diamondColor: UIColor = .brightcyan
     static let buttonbackground: Color = .limegreen
     static let levelupbackground: Color = .darkpink
     static let primarycolor: Color = .warmwhite
@@ -55,7 +55,7 @@ enum Highscore {
     
     enum Top5 {
         static let text: String = "Congrats, you made it into the TOP5!"    // Text for new highscore
-        static let sound = GameSound.top5                                   // sound new highscore
+        static let sound = GameSound.top5Entry                                   // sound new highscore
     }
     
     enum Missed {
@@ -68,7 +68,7 @@ enum Highscore {
 
 enum ObjectType {
     case circle
-    case square
+    case diamond
 }
 
 
@@ -76,18 +76,18 @@ enum ObjectType {
 enum GamingObject {
     
     enum Circle {
-        static let fillcolor = Colors.circlecolor       // color for circle
+        static let fillcolor = Colors.circleColor       // color for circle
         static let size: Double  = 30.0                 // size for circle
         static let score: Int = 1                       // score for circle
         static let sound = GameSound.circle             // sound for circle
         static let particle: String = "ParticleFire"    // filename for particle overlay for a circle
     }
     
-    enum Square {
-        static let fillcolor = Colors.squarecolor        // color for square
+    enum Diamond {
+        static let fillcolor = Colors.diamondColor        // color for square
         static let size: Double  = 50.0                  // size for square
         static let score: Int = 10                       // score for square
-        static let sound = GameSound.square              // sound for circle
+        static let sound = GameSound.diamont              // sound for circle
         static let particle: String = "ParticleMagic"    // filename for particle overlay for a circle
     }
     
