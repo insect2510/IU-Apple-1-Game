@@ -107,7 +107,7 @@ class GameScene: SKScene {
     }
     
     
-    // draw object
+    // create object
     
     private func createObject(
         

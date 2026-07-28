@@ -352,6 +352,20 @@ struct GameView: View {
         }
     }
     
+    // check for qualifing in highscore
+    
+    func qualifiesForHighscore(score: Int) -> Bool {
+        
+        // load top 5 scores
+        
+        let topScores = highScore.prefix(5)
+        
+        // check for qualifing
+        
+        return topScores.count < 5 ||
+        score > (topScores.last?.points ?? 0)
+        
+    }
     
     // save highscore
     
@@ -361,17 +375,7 @@ struct GameView: View {
         
     ) -> Bool {
         
-        // load top 5 scores
-        
-        let topScores = highScore.prefix(5)
-        
-        // check for qualifing
-        
-        let qualifies =
-        topScores.count < 5 ||
-        score > (topScores.last?.points ?? 0)
-        
-        if !qualifies {
+        guard qualifiesForHighscore(score: score) else {
             return false
         }
         
@@ -381,11 +385,6 @@ struct GameView: View {
             
             if let lowestScore = highScore.last {
                 modelContext.delete(lowestScore)
-                
-                // print deleted values to console while testing
-                
-                print("Deleted:")
-                print(lowestScore.points)
             }
         }
         
@@ -397,11 +396,9 @@ struct GameView: View {
             level: level
         )
         
-        
         // insert new highscore object
         
         modelContext.insert(newScore)
-        
         
         // save data model with new highscore
         
@@ -409,23 +406,9 @@ struct GameView: View {
             
             try modelContext.save()
             
-            // print values to console while testing
-            
-            print("Gespeichert")
-            print(newScore.name)
-            print(newScore.points)
-            print(newScore.level)
-            
             // reload data model and print values to console while testing
             
-            let descriptor = FetchDescriptor<Score>()
-            let result = try modelContext.fetch(descriptor)
-            
-            print("Direkt gefunden:", result.count)
-            
-            for item in result {
-                print(item.name, item.points, item.level)
-            }
+            printHighScore()
             
             return true
             
@@ -434,10 +417,29 @@ struct GameView: View {
         } catch {
             print(error)
             return false
-            
         }
         
+        func printHighScore() {
+            
+            // reload data model and print values to console while testing
+            
+            do {
+                let descriptor = FetchDescriptor<Score>()
+                let result = try modelContext.fetch(descriptor)
+                
+                print("Highscore:", result.count)
+                
+                for score in result {
+                    print(score.name, score.points, score.level)
+                }
+                // catch errors
+                
+            } catch {
+                print(error)
+            }
+        }
     }
+    
     
     
     // format time into string
