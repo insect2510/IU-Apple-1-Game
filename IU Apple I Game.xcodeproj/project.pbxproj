@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		EFDB0D572FEC987400FA4C3A /* IU Apple I Game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "IU Apple I Game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EFDB0D572FEC987400FA4C3A /* TOJ Touch The Object.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TOJ Touch The Object.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -40,7 +40,7 @@
 		EFDB0D582FEC987400FA4C3A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EFDB0D572FEC987400FA4C3A /* IU Apple I Game.app */,
+				EFDB0D572FEC987400FA4C3A /* TOJ Touch The Object.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,9 +48,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		EFDB0D562FEC987400FA4C3A /* IU Apple I Game */ = {
+		EFDB0D562FEC987400FA4C3A /* TOJ Touch The Object */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EFDB0D622FEC987500FA4C3A /* Build configuration list for PBXNativeTarget "IU Apple I Game" */;
+			buildConfigurationList = EFDB0D622FEC987500FA4C3A /* Build configuration list for PBXNativeTarget "TOJ Touch The Object" */;
 			buildPhases = (
 				EFDB0D532FEC987400FA4C3A /* Sources */,
 				EFDB0D542FEC987400FA4C3A /* Frameworks */,
@@ -63,11 +63,11 @@
 			fileSystemSynchronizedGroups = (
 				EFDB0D592FEC987400FA4C3A /* TOJ Game */,
 			);
-			name = "IU Apple I Game";
+			name = "TOJ Touch The Object";
 			packageProductDependencies = (
 			);
 			productName = Gametest;
-			productReference = EFDB0D572FEC987400FA4C3A /* IU Apple I Game.app */;
+			productReference = EFDB0D572FEC987400FA4C3A /* TOJ Touch The Object.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -99,7 +99,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				EFDB0D562FEC987400FA4C3A /* IU Apple I Game */,
+				EFDB0D562FEC987400FA4C3A /* TOJ Touch The Object */,
 			);
 		};
 /* End PBXProject section */
@@ -342,7 +342,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EFDB0D622FEC987500FA4C3A /* Build configuration list for PBXNativeTarget "IU Apple I Game" */ = {
+		EFDB0D622FEC987500FA4C3A /* Build configuration list for PBXNativeTarget "TOJ Touch The Object" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EFDB0D632FEC987500FA4C3A /* Debug */,
