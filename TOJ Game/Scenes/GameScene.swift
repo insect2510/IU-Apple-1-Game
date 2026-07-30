@@ -43,7 +43,6 @@ class GameScene: SKScene {
     private var randomObjectValue = 1
     private var objectType: ObjectType = ObjectType.coin
     
-    
     override func didMove(to view: SKView) {
         
         // background clear for scene
@@ -75,6 +74,7 @@ class GameScene: SKScene {
                 timer.invalidate()
                 return
             }
+            
             gameData.timeRemaining -= 1
             if gameData.timeRemaining == 0 {
                 endGame()
@@ -155,7 +155,7 @@ class GameScene: SKScene {
         let fadeIn = SKAction.fadeIn(withDuration: ObjectAnimation.fadeInDuration)
         let scaleUp = SKAction.scale(to: 1, duration: ObjectAnimation.fadeInDuration)
         scaleUp.timingMode = .easeOut
-        object.run(SKAction.group([fadeIn, scaleUp]))
+        object.run(SKAction.sequence([fadeIn, scaleUp]))
         
     }
     

@@ -105,14 +105,15 @@ struct GameView: View {
                 }
                 
                 
-                //MARK: Game Start
+                //MARK: Game Over
                 
                 if gameIsOver {
                     GameOverView(score: finalScore,
                                  level: finalLevel,
                                  isNewHighScore: isNewHighScore,
                                  restartAction: restartGame)
-                    
+                
+                //MARK: Game Start
                     
                 } else if !isGaming {
                     
