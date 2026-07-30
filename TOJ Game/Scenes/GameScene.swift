@@ -117,11 +117,17 @@ class GameScene: SKScene {
         
         let object: SKShapeNode
         
+        // choose SKShapeNode based on object type
+        
         switch type {
+        
+        // use a circle for coin
             
         case .coin:
             object = SKShapeNode(circleOfRadius: GamingObject.Coin.size)
             object.fillColor = GamingObject.Coin.fillcolor
+            
+        // use a rectangle for diamond
             
         case .diamond:
             object = SKShapeNode(
@@ -129,7 +135,10 @@ class GameScene: SKScene {
                                height: GamingObject.Diamond.size)
             )
             object.fillColor = Colors.diamondColor
-            object.zRotation = .pi / 4 // Rotation 45 Grad
+            
+            // rotate 45 degrees to make the rect a diamond shape
+            
+            object.zRotation = .pi / 4
         }
         object.strokeColor = .clear
         
